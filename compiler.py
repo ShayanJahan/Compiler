@@ -143,7 +143,7 @@ current_state = 0
 
 last_comment_line = -1
 
-lexical_errors = [list() for i in range(1000)]
+lexical_errors = [list() for i in range(10000)]
 
 TFL = False
 
@@ -172,9 +172,16 @@ for s in INP.readlines():
 
 			t = find_type(c)
 			if not in_comment_all and not in_comment_line and t == '!':
-				lexical_errors[tk_counter].append("(" + current_string + ", " + "Invalid input" + ") ")
-				current_state = 0
-				current_string = ""
+				if current_string[0:-1] == "/":
+					if len(current_string[0:-1]) > 0:
+						lexical_errors[tk_counter].append("(" + current_string[0:-1] + ", " + "Invalid input" + ") ")
+					lexical_errors[tk_counter].append("(" + c + ", " + "Invalid input" + ") ")
+					current_state = 0
+					current_string = ""
+				else:
+					lexical_errors[tk_counter].append("(" + current_string + ", " + "Invalid input" + ") ")
+					current_state = 0
+					current_string = ""
 			elif t in mat[current_state]:
 				if mat[current_state][t] == -1:
 					if c == ' ' or c == '\n' or c == '\t':
@@ -184,7 +191,11 @@ for s in INP.readlines():
 				current_state = mat[current_state][t]
 				#print("-> " + str(current_state))
 			else:
-				if oth[current_state] == -1:
+				if oth[current_state] == -1 and current_state == 10:
+					fin = False
+					current_string = current_string[0: -1]
+					lexical_errors[tk_counter].append("(" + current_string + ", " + message[current_state] + ") ")
+				elif oth[current_state] == -1:
 					if c == ' ' or c == '\n' or c == '\t':
 						current_string = current_string[0: -1]
 					lexical_errors[tk_counter].append("(" + current_string + ", " + message[current_state] + ") ")
