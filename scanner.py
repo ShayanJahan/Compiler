@@ -244,6 +244,10 @@ class Scanner:
                 f.write('\n')
 
     def write_lexical_errors(self, file_name):
+        if self.current_state == 11 or self.current_state == 13:
+            self.lexical_errors[self.last_comment_line].append(
+                "(" + self.current_string[:7] + "..., " + "Unclosed comment) ")
+
         with open(file_name, 'w') as LE:
             flag = False
             for i in range(10000):
