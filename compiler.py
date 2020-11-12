@@ -7,7 +7,7 @@ if __name__ == '__main__':
     scanner = Scanner('input.txt')
     scanner.init_states()
 
-    while scanner.get_next_token() != 'END OF FILE':
+    while scanner.get_next_token()[0] != '$':
         pass
 
     scanner.write_tokens('tokens.txt')

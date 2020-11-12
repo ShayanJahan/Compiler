@@ -13,7 +13,7 @@ class Scanner:
 
         self.current_state = 0
         self.current_string = ""
-        self.tk_counter = 0
+        self.tk_counter = 1
         self.in_comment_all = False
         self.last_comment_line = -1
         self.lexical_errors = [list() for _ in range(10000)]
@@ -223,8 +223,8 @@ class Scanner:
     def get_next_token(self):
         while True:
             char = self.input_file.read(1)
-            if char == '':
-                return 'END OF FILE'
+            if char == '$' or char == '':
+                return '$', 'END OF FILE'
             prev_len = len(self.all_tokens)
             self.process_next_char(char)
             if len(self.all_tokens) > prev_len:
