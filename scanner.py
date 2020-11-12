@@ -20,6 +20,7 @@ class Scanner:
         self.in_comment_line = False
         self.tokens = [list() for _ in range(10000)]
         self.all_tokens = list()
+        self.new_tokens = list()
 
         self.input_file = open(input_name, 'r')
 
@@ -160,7 +161,6 @@ class Scanner:
                         "(" + self.current_string + ", " + self.message[self.current_state] + ") ")
 
                 self.current_state = self.mat[self.current_state][t]
-            # print("-> " + str(current_state))
             else:
                 if self.oth[self.current_state] == -1 and self.current_state == 10:
                     fin = False
@@ -174,7 +174,6 @@ class Scanner:
                         "(" + self.current_string + ", " + self.message[self.current_state] + ") ")
 
                 self.current_state = self.oth[self.current_state]
-                # print("-> " + str(current_state))
                 if self.current_state == -1:
                     self.current_state = 0
                     self.current_string = ""
@@ -221,17 +220,30 @@ class Scanner:
                 self.current_string = ""
 
     def get_next_token(self):
+        if self.new_tokens:
+            p1, p2 = self.new_tokens[0]
+            if p1 in {'KEYWORD', 'SYMBOL'}:
+                p1, p2 = p2, p1
+            self.new_tokens.pop(0)
+            return p1, p2
+
         while True:
             char = self.input_file.read(1)
             if char == '$' or char == '':
                 return '$', 'END OF FILE'
-            prev_len = len(self.all_tokens)
+
             self.process_next_char(char)
-            if len(self.all_tokens) > prev_len:
-                return self.all_tokens[-1]
+
+            if self.new_tokens:
+                p1, p2 = self.new_tokens[0]
+                if p1 in {'KEYWORD', 'SYMBOL'}:
+                    p1, p2 = p2, p1
+                self.new_tokens.pop(0)
+                return p1, p2
 
     def add_token(self, token_type, string):
         self.all_tokens.append((token_type, string))
+        self.new_tokens.append(self.all_tokens[-1])
         self.tokens[self.tk_counter].append((token_type, string))
 
     def write_tokens(self, file_name):
