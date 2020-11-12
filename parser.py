@@ -71,6 +71,7 @@ class Parser:
                 self.root = current_node
 
             if state == EPSILON:
+                current_node.name = 'epsilon'
                 continue
 
             if state in self.non_terminals:
