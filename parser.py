@@ -91,7 +91,7 @@ class Parser:
                         stack.append((char, current_node))
             else:
                 if state == token_type or state == token_string:
-                    current_node.name = token_string
+                    current_node.name = f'({token_string}, {token_type})'
                     token_type, token_string = self.scanner.get_next_token()
                 else:
                     self.add_error(f'syntax error, missing {state}')
@@ -104,6 +104,6 @@ class Parser:
     def write_syntax_errors(self, file_name):
         with open(file_name, 'w') as syntax_file:
             if self.errors:
-                syntax_file.write('\n'.join(f'#{a}: {b}' for a, b in self.errors))
+                syntax_file.write('\n'.join(f'#{a} : {b}' for a, b in self.errors))
             else:
                 syntax_file.write('There is no syntax error.')
