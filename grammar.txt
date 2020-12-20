@@ -77,11 +77,11 @@ Signed-factor-zegond -> Factor-zegond
 Factor -> ( Expression )
 Factor -> ID #push_id Var-call-prime
 Factor -> NUM #push_number
-Var-call-prime -> ( Args )
+Var-call-prime -> ( Args ) #print_function
 Var-call-prime -> Var-prime
-Var-prime -> [ Expression ] #array_access
+Var-prime -> [ Expression ] #find_array_index_address
 Var-prime -> ε
-Factor-prime -> ( Args )
+Factor-prime -> ( Args ) #print_function
 Factor-prime -> ε
 Factor-zegond -> ( Expression )
 Factor-zegond -> NUM #push_number
