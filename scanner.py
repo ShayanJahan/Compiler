@@ -222,7 +222,7 @@ class Scanner:
     def get_next_token(self):
         if self.new_tokens:
             p1, p2 = self.new_tokens[0]
-            if p1 in {'KEYWORD', 'SYMBOL'}:
+            if p1 in {'KEYWORD', 'SYMBOL', 'NUM', 'ID'}:
                 p1, p2 = p2, p1
             self.new_tokens.pop(0)
             return p1, p2
