@@ -26,7 +26,7 @@ class Subroutines:
         self.semantic_stack.pop()
 
     def push_id(self, string):
-        self.semantic_stack.append(self.symbol_table.find_address(string))
+        self.semantic_stack.append(self.symbol_table.find_address(string)[1])
 
     def define_variable(self, string):
         self.symbol_table.find_address(string)
