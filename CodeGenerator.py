@@ -68,7 +68,7 @@ class Subroutines:
         self.semantic_stack.pop()
 
         self.add_to_program_block(code=f"(JP, {line_before_while}, , )")
-        self.add_to_program_block(code=f"(JPF, {compare_result}, {self.program_block_counter}, )",
+        self.add_to_program_block(code=f"(JPF, {compare_result}, {self.program_block_counter + 1}, )",
                                   line=line_after_while)
 
     def assign(self, string):
