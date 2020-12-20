@@ -78,11 +78,7 @@ class Parser:
 
             if state.startswith('#'):
                 func_name = state[1:]
-                print(prev_string, token_type, func_name)
-                print('*', self.subroutines.semantic_stack)
-
                 getattr(self.subroutines, func_name)(string=prev_string)
-                print(self.subroutines.semantic_stack)
                 continue
 
             if state in self.non_terminals:
