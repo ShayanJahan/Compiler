@@ -1,4 +1,5 @@
 import anytree
+from CodeGenerator import Subroutines
 
 EPSILON = 'ε'
 
@@ -19,6 +20,7 @@ class Parser:
         self.scanner = scanner
         self.errors = list()
         self.root = None
+        self.subroutines = Subroutines()
 
     def open_grammar(self):
         with open('grammar.txt', 'r') as grammar_file:
@@ -72,6 +74,11 @@ class Parser:
 
             if state == EPSILON:
                 current_node.name = 'epsilon'
+                continue
+
+            if state.startswith('#'):
+                func_name = state[1:]
+                self.subroutines.__getattribute__(name=func_name)(string=token_string)
                 continue
 
             if state in self.non_terminals:
