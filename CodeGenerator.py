@@ -88,7 +88,7 @@ class Subroutines:
         final_address = self.symbol_table.get_temp()
 
         self.add_to_program_block(code=f"(MULT, {i}, #{self.symbol_table.byte_length}, {imul4})")
-        self.add_to_program_block(code=f"(ADD, {a}, #{imul4}, {final_address})")
+        self.add_to_program_block(code=f"(ADD, #{a}, {imul4}, {final_address})")
         self.semantic_stack.append("@" + str(final_address))
 
     def add_or_sub_or_compare(self, string):
