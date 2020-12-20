@@ -88,7 +88,7 @@ class Subroutines:
         final_address = self.symbol_table.get_temp()
 
         self.add_to_program_block(code=f"(MULT, {i}, #{self.symbol_table.byte_length}, {imul4})")
-        self.add_to_program_block(code=f"(ADD, {a}, #{imul4}, %{s})")
+        self.add_to_program_block(code=f"(ADD, {a}, #{imul4}, %{final_address})")
         self.semantic_stack.append("@" + str(final_address))
 
     def add_or_sub_or_compare(self, string):
@@ -141,9 +141,14 @@ class Subroutines:
 
         self.semantic_stack.append(result)
 
+    def print_function(self, string):
+        A = self.semantic_stack[-1]
+        self.add_to_program_block(code=f"(PRINT, {A}, , )")
+        self.semantic_stack.pop()
+
     def write_output(self, file_name):
         with open(file_name, 'w') as f:
             st_counter = 0
             for s in self.program_block:
-                st_counter += 1
                 f.write(str(st_counter) + '\t' + s + '\n')
+                st_counter += 1
