@@ -1,64 +1,64 @@
 from SymbolTable import SymbolTable
 
+
 class Subroutines:
     def __init__(self):
         self.semantic_stack = []
-        program_block = []
-        program_block_counter = 0
-
-        symbol_table = SymbolTable()
-
         self.stack = list()
         self.symbol_table = SymbolTable()
         self.program_block = list()
-        program_block = 0
+        self.program_block_counter = 0
 
-    def self.add_to_program_block(self, str: string):
-        self.program_block.append(str)
+    def add_to_program_block(self, code, line=None):
+        if line is None:
+            self.program_block.append(code)
+            self.program_block_counter += 1
+        else:
+            self.program_block[line] = code
 
-    def push_number(self, str: string):
-        temp = symbol_table.get_temp();
-        value = int(str)
-        self.add_to_program_block(code = "(ASSIGN, #%s, %d, )" % (value, temp))
+    def push_number(self, string):
+        temp = self.symbol_table.get_temp()
+        value = int(string)
+        self.add_to_program_block(f"(ASSIGN, #{value}, {temp}, )")
         self.semantic_stack.append(temp)
 
-    def pop_number (self, str: string):
+    def pop_number(self, string):
         self.semantic_stack.pop()
 
-    def push_id (self, str: string):
-        self.semantic_stack.append(symbol_table.find_address(str))
+    def push_id(self, string):
+        self.semantic_stack.append(self.symbol_table.find_address(string))
 
-    def define_variable (self, str: string):
-        symbol_table.find_address(str)
+    def define_variable(self, string):
+        self.symbol_table.find_address(string)
 
-    def array_space (self, str: string):
-        symbol_table.extend(int(str))
+    def array_space(self, string):
+        self.symbol_table.make_space(int(string))
 
-    def save_adress (self, str: string):
-        self.semantic_stack.append(program_block_counter)
-        self.add_to_program_block(code = None)
+    def save_address(self, string):
+        self.semantic_stack.append(self.program_block_counter)
+        self.add_to_program_block(code=None)
 
-    def false_condition_jump (self, str: string):
+    def false_condition_jump(self, string):
         compare_result = self.semantic_stack[-2]
         jump_line = self.semantic_stack[-1]
 
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        self.semantic_stack.append(program_block_counter)
+        self.semantic_stack.append(self.program_block_counter)
 
-        self.add_to_program_block(code = None)
-        self.add_to_program_block(code = "(JPF, %s, %s, )" % (compare_result, program_block_counter), line_number = jump_line)
+        self.add_to_program_block(code=None)
+        self.add_to_program_block(code=f"(JPF, {compare_result}, {self.program_block_counter}, )", line=jump_line)
 
-    def jump (self, str: string):
+    def jump(self, string):
         jump_line = self.semantic_stack[-1]
-        self.add_to_program_block(code = "(JP, %s, , )" % program_block_counter, line_number = jump_line)
+        self.add_to_program_block(code=f"(JP, {self.program_block_counter}, , )", line=jump_line)
         self.semantic_stack.pop()
 
-    def label (self, str: string):
-        self.semantic_stack.append(program_block_counter)
+    def label(self, string):
+        self.semantic_stack.append(self.program_block_counter)
 
-    def while_end (self, str: string):
+    def while_end(self, string):
         line_before_while = self.semantic_stack[-3]
         compare_result = self.semantic_stack[-2]
         line_after_while = self.semantic_stack[-1]
@@ -67,31 +67,31 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        self.add_to_program_block(code = "(JP, %s, , )" % line_before_while)
-        self.add_to_program_block(code = "(JPF, %s, %s, )" % (compare_result, program_block_counter),
-                    line_number = line_after_while)
+        self.add_to_program_block(code=f"(JP, {line_before_while}, , )")
+        self.add_to_program_block(code=f"(JPF, {compare_result}, {self.program_block_counter}, )",
+                                  line=line_after_while)
 
-    def assign (self, str: string):
-        A = self.semantic_stack[-1]
-        R = self.semantic_stack[-2]
+    def assign(self, string):
+        a = self.semantic_stack[-1]
+        b = self.semantic_stack[-2]
         self.semantic_stack.pop()
 
-        self.add_to_program_block(code="(ASSIGN, %s, %s, )" % (A, R))
+        self.add_to_program_block(code=f"(ASSIGN, {a}, {b}, )")
 
-    def find_array_index_address (self, str: string):
+    def find_array_index_address(self, string):
         a = self.semantic_stack[-2]
         i = self.semantic_stack[-1]
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        imul4 = symbol_table.get_temp()
-        final_address = symbol_table.get_temp()
+        imul4 = self.symbol_table.get_temp()
+        final_address = self.symbol_table.get_temp()
 
-        self.add_to_program_block(code="(MULT, %s, #4, %s)" % (i, imul4))
-        self.add_to_program_block(code="(ADD, %s, #%s, %s)" % (a, imul4, final_address))
+        self.add_to_program_block(code=f"(MULT, {i}, #{self.symbol_table.byte_length}, {imul4})")
+        self.add_to_program_block(code=f"(ADD, {a}, #{imul4}, %{s})")
         self.semantic_stack.append("@" + str(final_address))
 
-    def compare (self, str: string):
+    def add_or_sub_or_compare(self, string):
         A = self.semantic_stack[-3]
         op = self.semantic_stack[-2]
         B = self.semantic_stack[-1]
@@ -100,58 +100,50 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        result = symbol_table.get_temp()
+        result = self.symbol_table.get_temp()
 
-        self.add_to_program_block(code = "(%s, %s, %s, %s)" % (op, A, B, result))
+        self.add_to_program_block(code=f"({op}, {A}, {B}, {result})")
 
         self.semantic_stack.append(result)
 
-    def LT (self, str: string):
+    def LT(self, string):
         self.semantic_stack.append('LT')
 
-    def EQ (self, str: string):
+    def EQ(self, string):
         self.semantic_stack.append('EQ')
 
-    def add_or_sub (self, str: string):
-        A = self.semantic_stack[-3]
-        op = self.semantic_stack[-2]
-        B = self.semantic_stack[-1]
-
-        self.semantic_stack.pop()
-        self.semantic_stack.pop()
-        self.semantic_stack.pop()
-
-        result = symbol_table.get_temp()
-
-        self.add_to_program_block(code = "(%s, %s, %s, %s)" % (op, A, B, result))
-
-        self.semantic_stack.append(result)
-
-    def add_values (self, str: string):
+    def add_values(self, string):
         self.semantic_stack.append('ADD')
 
-    def sub_values (self, str: string):
+    def sub_values(self, string):
         self.semantic_stack.append('SUB')
 
-    def mult_values (self, str: string):
+    def mult_values(self, string):
         A = self.semantic_stack[-2]
         B = self.semantic_stack[-1]
 
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        result = symbol_table.get_temp()
+        result = self.symbol_table.get_temp()
 
-        self.add_to_program_block(code="(MULT, %s, %s, %s)" % (A, B, result))
+        self.add_to_program_block(code=f"(MULT, {A}, {B}, {result})")
 
         self.semantic_stack.append(result)
 
-    def change_sign (self, str: string):
+    def change_sign(self, string):
         A = self.semantic_stack[-1]
         self.semantic_stack.pop()
 
-        result = symbol_table.get_temp()
+        result = self.symbol_table.get_temp()
 
-        self.add_to_program_block(code="(MULT, %s, #-1, %s)" % (A, result))
+        self.add_to_program_block(code=f"(MULT, {A}, #-1, {result})")
 
         self.semantic_stack.append(result)
+
+    def write_output(self, file_name):
+        with open(file_name, 'w') as f:
+            st_counter = 0
+            for s in self.program_block:
+                st_counter += 1
+                f.write(str(st_counter) + '\t' + s + '\n')

@@ -16,3 +16,6 @@ class SymbolTable:
     def get_temp(self):
         self.start_temp += self.byte_length
         return self.start_temp - self.byte_length
+
+    def make_space(self, value):
+        self.start_data += value * self.byte_length

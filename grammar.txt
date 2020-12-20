@@ -51,14 +51,14 @@ H -> = Expression #assign
 H -> G D C
 Simple-expression-zegond -> Additive-expression-zegond C
 Simple-expression-prime -> Additive-expression-prime C
-C -> Relop Additive-expression #compare
+C -> Relop Additive-expression #add_or_sub_or_compare
 C -> ε
 Relop -> < #LT
 Relop -> == #EQ
 Additive-expression -> Term D
 Additive-expression-prime -> Term-prime D
 Additive-expression-zegond -> Term-zegond D
-D -> Addop Term #add_or_sub D
+D -> Addop Term #add_or_sub_or_compare D
 D -> ε
 Addop -> + #add_values
 Addop -> - #sub_values

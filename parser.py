@@ -60,7 +60,7 @@ class Parser:
 
     def start(self):
         token_type, token_string = self.scanner.get_next_token()
-
+        prev_string = None
         stack = [('Program', None)]
 
         while stack:
@@ -78,12 +78,17 @@ class Parser:
 
             if state.startswith('#'):
                 func_name = state[1:]
-                self.subroutines.__getattribute__(name=func_name)(string=token_string)
+                print(prev_string, token_type, func_name)
+                print('*', self.subroutines.semantic_stack)
+
+                getattr(self.subroutines, func_name)(string=prev_string)
+                print(self.subroutines.semantic_stack)
                 continue
 
             if state in self.non_terminals:
                 while token_type not in self.table[state] and token_type != '$':
                     self.add_error(f'syntax error, illegal {token_type}')
+                    prev_string = token_type
                     token_type, token_string = self.scanner.get_next_token()
 
                 if token_type == '$' and token_type not in self.table[state]:
@@ -98,7 +103,10 @@ class Parser:
                         stack.append((char, current_node))
             else:
                 if state == token_type or state == token_string:
+                    if token_type in {'ID', 'NUM'}:
+                        token_type, token_string = token_string, token_type
                     current_node.name = f'({token_string}, {token_type})'
+                    prev_string = token_type
                     token_type, token_string = self.scanner.get_next_token()
                 else:
                     self.add_error(f'syntax error, missing {state}')
