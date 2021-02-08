@@ -16,7 +16,7 @@ Param-list-void-abtar -> ID Param-prime Param-list
 Param-list-void-abtar -> ε
 Param-list -> , Param Param-list
 Param-list -> ε
-Param -> Declaration-initial Param-prime #add_param
+Param -> Declaration-initial Param-prime
 Param-prime -> [ ] #push_array_type
 Param-prime -> ε #push_non_type
 Compound-stmt -> { Declaration-list Statement-list }
