@@ -31,12 +31,14 @@ class Subroutines:
         if line is None:
             self.program_block.append(code)
             self.program_block_counter += 1
+            print(self.program_block[-1])
         else:
             self.program_block[line] = code
+            print(self.program_block[line])
 
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
-
+        
     def get_by_relative_address(self, relative_address):
         tmp = self.symbol_table.get_temp()
         self.add_to_program_block(code=f"(ADD, {self.symbol_table.st_pointer}, #{relative_address}, {tmp})")
@@ -542,5 +544,6 @@ class Subroutines:
                 return
             st_counter = 0
             for s in self.program_block:
+                #print(s)
                 f.write(str(st_counter) + '\t' + s + '\n')
                 st_counter += 1
