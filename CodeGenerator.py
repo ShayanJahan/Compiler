@@ -320,12 +320,12 @@ class Subroutines:
         if_line = self.semantic_stack[-1]
         self.semantic_stack.pop()
         self.semantic_stack.append(self.program_block_counter - 1)
-        self.program_block[if_line].replace('?', str(self.program_block_counter))
+        self.program_block[if_line] = self.program_block[if_line].replace('?', str(self.program_block_counter))
 
     def end_if(self, string):
         else_line = self.semantic_stack[-1]
         self.semantic_stack.pop()
-        self.program_block[else_line].replace('?', str(self.program_block_counter))
+        self.program_block[else_line] = self.program_block[else_line].replace('?', str(self.program_block_counter))
 
     def false_condition_jump(self, string):
         compare_result = self.semantic_stack[-2]
@@ -470,8 +470,8 @@ class Subroutines:
 
         self.semantic_stack = self.semantic_stack[:-3]
         self.add_to_program_block(code=f'(JP, {beginning_line}, , )')
-        self.program_block[condition_line].replace('?', str(self.program_block_counter))
-        self.program_block[outer_line].replace('?', str(self.program_block_counter))
+        self.program_block[condition_line] = self.program_block[condition_line].replace('?', str(self.program_block_counter))
+        self.program_block[outer_line] = self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
         self.code_scope_stack.pop()
 
@@ -483,7 +483,7 @@ class Subroutines:
 
     def end_switch(self, string):
         outer_line = self.semantic_stack[-2]
-        self.program_block[outer_line].replace('?', str(self.program_block_counter))
+        self.program_block[outer_line] = self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
         self.semantic_stack = self.semantic_stack[:-2]
         self.code_scope_stack.pop()
@@ -495,12 +495,14 @@ class Subroutines:
 
         result_address = self.symbol_table.get_temp()
         self.add_to_program_block(code=f'(EQ, {case_address}, {switch_address}, {result_address})')
-        self.add_to_program_block(code=f'(JPF, {result_address}, ?, )')
+        print(self.program_block_counter)
         self.semantic_stack.append(self.program_block_counter)
+        self.add_to_program_block(code=f'(JPF, {result_address}, ?, )')
 
     def end_case(self, string):
         condition_line = self.semantic_stack[-1]
-        self.program_block[condition_line].replace('?', str(self.program_block_counter))
+        self.program_block[condition_line] = self.program_block[condition_line].replace('?',
+                                                                                        str(self.program_block_counter))
         self.semantic_stack.pop()
 
     def break_command(self, string):
