@@ -224,13 +224,29 @@ class Subroutines:
         temp = self.symbol_table.get_temp()
         value = int(string)
         self.add_to_program_block(f"(ASSIGN, #{value}, {temp}, )")
-        self.semantic_stack.append(temp)
+        symbol = Symbol(name="", variable_type='int', address_type='global', address=temp, scope=-1,
+                        symbol_type='variable')
+        self.semantic_stack.append(symbol)
 
     def pop_number(self, string):
         self.semantic_stack.pop()
 
     def push_id(self, string):
-        self.semantic_stack.append(self.symbol_table.find_address(string)[1])
+        try:
+            symbol = self.symbol_table.find_address(string)
+            self.semantic_stack.append(symbol)
+        except:
+            self.semantic_checker.undefined_error(string)
+            self.semantic_stack.append(None)
+
+    def push(self, string):
+        self.semantic_stack.append(string)
+
+    def push_array_type(self, string):
+        self.semantic_stack.append('array')
+
+    def push_non_type(self, string):
+        self.semantic_stack.append('nothing')
 
     def define_variable(self, string):
         variable_type = self.semantic_stack[-2]
@@ -335,12 +351,31 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        imul4 = self.symbol_table.get_temp()
-        final_address = self.symbol_table.get_temp()
+        a = self.find_symbol_address(a)
+        i = self.find_symbol_address(i)
 
-        self.add_to_program_block(code=f"(MULT, {i}, #{self.symbol_table.byte_length}, {imul4})")
-        self.add_to_program_block(code=f"(ADD, #{a}, {imul4}, {final_address})")
-        self.semantic_stack.append("@" + str(final_address))
+        final_address = self.function_memory[-1].frame_size
+        temp_address = self.get_by_relative_address(final_address)
+
+        symbol = Symbol(name="", variable_type='int', address_type='relative pointer',
+                        address=self.function_memory[-1].frame_size, scope=-1, symbol_type='variable')
+        self.semantic_stack.append(symbol)
+
+        self.function_memory[-1].frame_size += 4
+        self.add_to_program_block(code=f"(ADD, {a}, {i}, {temp_address})")
+
+    def is_int(self, *args):
+        flag = False
+        for symbol in args:
+            if symbol is None:
+                continue
+            if symbol.variable_type == 'int*':
+                self.semantic_checker.type_operation_error('array', 'int')
+                flag = True
+            if symbol.variable_type == 'function':
+                self.semantic_checker.type_operation_error('function', 'int')
+                flag = True
+        return flag
 
     def add_or_sub_or_compare(self, string):
         A = self.semantic_stack[-3]
@@ -351,11 +386,18 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        result = self.symbol_table.get_temp()
+        if self.is_int(A, B):
+            return
+
+        relative_address = self.function_memory[-1].frame_size
+        result = self.get_by_relative_address(self.function_memory[-1].frame_size)
+        self.function_memory[-1].frame_size += 4
 
         self.add_to_program_block(code=f"({op}, {A}, {B}, {result})")
 
-        self.semantic_stack.append(result)
+        symbol = Symbol(name="", variable_type='int', address_type='relative', address=relative_address, scope=-1,
+                        symbol_type='variable')
+        self.semantic_stack.append(symbol)
 
     def LT(self, string):
         self.semantic_stack.append('LT')
@@ -446,11 +488,19 @@ class Subroutines:
         A = self.semantic_stack[-1]
         self.semantic_stack.pop()
 
-        result = self.symbol_table.get_temp()
+        if self.is_int(A):
+            return
+
+        A = self.find_symbol_address(self.semantic_stack[-1])
+        relative_address = self.function_memory[-1].frame_size
+        result = self.get_by_relative_address(relative_address)
+        self.function_memory[-1].frame_size += 4
 
         self.add_to_program_block(code=f"(MULT, {A}, #-1, {result})")
 
-        self.semantic_stack.append(result)
+        symbol = Symbol(name="", variable_type='int', address_type='relative', address=relative_address, scope=-1,
+                        symbol_type='variable')
+        self.semantic_stack.append(symbol)
 
     def print_function(self, string):
         A = self.semantic_stack[-1]

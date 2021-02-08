@@ -2,7 +2,7 @@ Program -> Declaration-list $
 Declaration-list -> Declaration Declaration-list
 Declaration-list -> ε
 Declaration -> Declaration-initial Declaration-prime
-Declaration-initial -> Type-specifier #push_type ID #push
+Declaration-initial -> Type-specifier #push ID #push
 Declaration-prime -> Fun-declaration-prime
 Declaration-prime -> Var-declaration-prime
 Var-declaration-prime -> #define_variable ;
@@ -10,15 +10,15 @@ Var-declaration-prime -> [ NUM #push #define_array ] ;
 Fun-declaration-prime -> ( Params ) Compound-stmt
 Type-specifier -> int
 Type-specifier -> void
-Params -> int ID Param-prime Param-list
+Params -> int #push ID #push Param-prime #add_param Param-list
 Params -> void Param-list-void-abtar
 Param-list-void-abtar -> ID Param-prime Param-list
 Param-list-void-abtar -> ε
 Param-list -> , Param Param-list
 Param-list -> ε
-Param -> Declaration-initial Param-prime
-Param-prime -> [ ]
-Param-prime -> ε
+Param -> Declaration-initial Param-prime #add_param
+Param-prime -> [ ] #push_array_type
+Param-prime -> ε #push_non_type
 Compound-stmt -> { Declaration-list Statement-list }
 Statement-list -> Statement Statement-list
 Statement-list -> ε
