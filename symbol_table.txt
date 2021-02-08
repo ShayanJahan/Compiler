@@ -8,7 +8,9 @@
 8.	default
 9.	case
 10.	return
-11.	foo
-12.	x
-13.	main
-14.	output
+11.	arr
+12.	var1
+13.	func
+14.	arg
+15.	main
+16.	output
