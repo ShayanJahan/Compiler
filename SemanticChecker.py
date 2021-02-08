@@ -11,6 +11,10 @@ class SemanticChecker:
         self.errors.append(f'#{self.parser.scanner.tk_counter} : Semantic Error! ' +
                            f"{variable_name} is not defined.")
 
+    def void_error(self, variable_name):
+        self.errors.append(f'#{self.parser.scanner.tk_counter} : Semantic Error! ' +
+                           f"Illegal type of void for {variable_name}'.")
+
     def arguments_count_error(self, function_name):
         self.errors.append(f'#{self.parser.scanner.tk_counter} : Semantic Error! ' +
                            f"Mismatch in numbers of arguments of {function_name}.")

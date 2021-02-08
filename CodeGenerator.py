@@ -1,10 +1,12 @@
 from SymbolTable import *
 from SemanticChecker import SemanticChecker
 
+
 class FunctionEntry:
     def __init__(self, *, frame_size, lexeme):
         self.frame_size = frame_size
         self.lexeme = lexeme
+
 
 class Subroutines:
     def __init__(self, semantic_checker):
@@ -49,7 +51,7 @@ class Subroutines:
         if symbol is None:
             return None
 
-        #if symbol.type == 'function':
+        # if symbol.type == 'function':
         #    raise Exception('extracting address from function')
 
         if symbol.addressing_type == 'global':
@@ -61,8 +63,7 @@ class Subroutines:
         if symbol.addressing_type == 'relative pointer':
             return self.at_at_to_at(self.get_by_relative_address(symbol.address))
 
-        #raise Exception("hendelll")
-
+        # raise Exception("hendelll")
 
     def call_function(self, function_symbol, arguments):
         if function_symbol is None:
@@ -157,7 +158,7 @@ class Subroutines:
             self.semantic_stack.append(self.program_block_counter - 1)
 
         self.symbol_table.add_symbol(Symbol(function_name, function_type, "code_line", self.program_block_counter,
-                                               'function', self.scope_stack[-1], arguments_number))
+                                            'function', self.scope_stack[-1], arguments_number))
 
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
@@ -177,7 +178,7 @@ class Subroutines:
                 type = type + '*'
 
             self.symbol_table.add_symbol(Symbol(argument_name, type, 'relative', self.function_memory[-1].frame_size,
-                       self.scope_stack[-1], 'variable'))
+                                                self.scope_stack[-1], 'variable'))
 
             self.function_memory[-1].frame_size += 4
 
@@ -219,7 +220,6 @@ class Subroutines:
 
         self.call_function(function_symbol, arguments)
 
-
     def push_number(self, string):
         temp = self.symbol_table.get_temp()
         value = int(string)
@@ -233,7 +233,54 @@ class Subroutines:
         self.semantic_stack.append(self.symbol_table.find_address(string)[1])
 
     def define_variable(self, string):
-        self.symbol_table.find_address(string)
+        variable_type = self.semantic_stack[-2]
+        variable_name = self.semantic_stack[-1]
+        self.semantic_stack = self.semantic_stack[:-2]
+
+        if variable_type == 'void':
+            self.semantic_checker.void_error(variable_name)
+            return
+
+        if self.function_memory:
+            self.function_memory[-1].frame_size += 4
+            symbol = Symbol(name=variable_name, variable_type=variable_type, address_type="relative",
+                            address=self.function_memory[-1].frame_size, scope=self.scope_stack[-1],
+                            symbol_type='variable')
+            self.symbol_table.symbols.append(symbol)
+        else:
+            symbol = Symbol(name=variable_name, variable_type=variable_type, address_type="global",
+                            address=self.symbol_table.get_global(), scope=self.scope_stack[-1],
+                            symbol_type='variable')
+            self.symbol_table.symbols.append(symbol)
+
+    def define_array(self, string):
+        array_type = self.semantic_stack[-3]
+        array_name = self.semantic_stack[-2]
+        array_len = self.semantic_stack[-1]
+        self.semantic_stack = self.semantic_stack[:-3]
+
+        if array_type == 'void':
+            self.semantic_checker.void_error(array_name)
+            return
+
+        if self.function_memory:
+            ptr_address = self.get_by_relative_address(self.function_memory[-1].frame_size)
+            self.function_memory[-1].frame_size += 4
+            address = self.get_by_relative_address(self.function_memory[-1].frame_size)
+            self.add_to_program_block(code=f'(ASSIGN, {address[1:]}, {ptr_address}, )')
+            self.function_memory[-1].frame_size += 4 * array_len
+
+            symbol = Symbol(name=array_name, variable_type=f'{array_name}*', address_type='relative',
+                            address=self.function_memory[-1], scope=self.scope_stack[-1], symbol_type='variable')
+            self.symbol_table.symbols.append(symbol)
+        else:
+            ptr_address = self.symbol_table.get_temp()
+            allocation_address = self.symbol_table.make_space(array_len)
+            self.add_to_program_block(code=f'(ASSIGN, #{allocation_address}, {ptr_address}, )')
+
+            symbol = Symbol(name=array_name, variable_type=(array_type + '*'), address_type='global',
+                            address=ptr_address, scope=self.scope_stack[-1], symbol_type='variable')
+            self.symbol_table.symbols.append(symbol)
 
     def array_space(self, string):
         self.symbol_table.make_space(int(string))
@@ -419,4 +466,3 @@ class Subroutines:
             for s in self.program_block:
                 f.write(str(st_counter) + '\t' + s + '\n')
                 st_counter += 1
-
