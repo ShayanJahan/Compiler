@@ -20,7 +20,7 @@ class Subroutines:
         self.scope_counter = 1
         self.function_memory = []
         self.function_signature = dict()
-        self.scope_stack = list()
+        self.code_scope_stack = list()
 
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
@@ -426,7 +426,7 @@ class Subroutines:
         self.semantic_stack.append(result)
 
     def start_while(self, string):
-        self.scope_stack.append(('while', len(self.semantic_stack)))
+        self.code_scope_stack.append(('while', len(self.semantic_stack)))
         self.add_to_program_block(code=f"(JP, {self.program_block_counter + 2}, , )")
         self.semantic_stack.append(self.program_block_counter)
         self.add_to_program_block(code="(JP, ?, , )")
@@ -448,10 +448,10 @@ class Subroutines:
         self.program_block[condition_line].replace('?', str(self.program_block_counter))
         self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
-        self.scope_stack.pop()
+        self.code_scope_stack.pop()
 
     def start_switch(self, string):
-        self.scope_stack.append(("switch", len(self.semantic_stack)))
+        self.code_scope_stack.append(("switch", len(self.semantic_stack)))
         self.add_to_program_block(f'(JP, {self.program_block_counter + 2}, , )')
         self.semantic_stack.append(self.program_block_counter)
         self.add_to_program_block(f'(JP, ?, , )')
@@ -461,7 +461,7 @@ class Subroutines:
         self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
         self.semantic_stack = self.semantic_stack[:-2]
-        self.scope_stack.pop()
+        self.code_scope_stack.pop()
 
     def start_case(self, string):
         case_address = self.find_symbol_address(self.semantic_stack[-1])
@@ -479,8 +479,8 @@ class Subroutines:
         self.semantic_stack.pop()
 
     def break_command(self, string):
-        if self.scope_stack:
-            jump_line = self.semantic_stack[self.scope_stack[-1][1]]
+        if self.code_scope_stack:
+            jump_line = self.semantic_stack[self.code_scope_stack[-1][1]]
             self.add_to_program_block(code=f'(JP, {jump_line}, , )')
         else:
             self.semantic_checker.break_error()
