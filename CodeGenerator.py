@@ -502,7 +502,7 @@ class Subroutines:
 
     def end_case(self, string):
         condition_line = self.semantic_stack[-1]
-        self.program_block[condition_line] = str(self.program_block_counter)
+        self.program_block[condition_line].replace('?', str(self.program_block_counter))
         self.semantic_stack.pop()
 
     def break_command(self, string):
