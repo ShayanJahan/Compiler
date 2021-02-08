@@ -392,6 +392,13 @@ class Subroutines:
         self.program_block[condition_line] = str(self.program_block_counter)
         self.semantic_stack.pop()
 
+    def break_command(self, string):
+        if self.scope_stack:
+            jump_line = self.semantic_stack[self.scope_stack[-1][1]]
+            self.add_to_program_block(code=f'(JP, {jump_line}, , )')
+        else:
+            self.semantic_checker.break_error()
+
     def change_sign(self, string):
         A = self.semantic_stack[-1]
         self.semantic_stack.pop()

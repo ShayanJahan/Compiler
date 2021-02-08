@@ -29,7 +29,7 @@ Statement -> Iteration-stmt
 Statement -> Return-stmt
 Statement -> Switch-stmt
 Expression-stmt -> Expression #pop_number ;
-Expression-stmt -> break;
+Expression-stmt -> break #break_command ;
 Expression-stmt -> ;
 Selection-stmt -> if ( Expression #save_address ) Statement #false_condition_jump else Statement #jump
 Iteration-stmt -> while ( #start_while Expression ) #while_condition Statement #end_while
