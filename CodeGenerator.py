@@ -23,8 +23,7 @@ class Subroutines:
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
-        self.symbol_table.add_symbol(
-            Symbol('output', 'void', "none", 0, 'function', 0, 1)
+        self.symbol_table.add_symbol(Symbol('output', 'void', "none", 0, 'function', 0, 1))
 
     def add_to_program_block(self, code, line=None):
         if line is None:
