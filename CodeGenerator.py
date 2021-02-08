@@ -32,12 +32,17 @@ class Subroutines:
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
 
+    def get_by_relative_address(self, relative_address):
+        tmp = self.symbol_table.get_simple_temp()
+        self.add_to_program_block(code=f"(ADD, {new_symbol_table.stack_pointer}, #{relative_address}, {tmp})")
+        return "@" + str(tmp)
+
     def call_function(self, function_symbol, arguments):
         if function_symbol is None:
             self.semantic_stack.append(None)
             return
         if len(arguments) != function_symbol.arguments_count:
-            #self.semantic_check(check_error='arguments_count', p1=function_symbol.lexeme) TODO error
+            self.semantic_check('arguments_count', function_symbol.lexeme)
             self.semantic_stack.append(None)
             return
 
@@ -46,7 +51,52 @@ class Subroutines:
             self.semantic_stack.append('output function void')
             return
 
+        stack_pointer_new_address = self.symbol_table.get_simple_temp()
+        self.add_to_program_block(
+            code=f"(ADD, {self.symbol_table.stack_pointer}, #{function_memory[-1].frame_size}, {stack_pointer_new_address})")
+        self.add_to_program_block(
+            code=f"(ASSIGN, {self.symbol_table.stack_pointer}, @{stack_pointer_new_address}, )")
 
+        return_address = self.symbol_table.get_simple_temp()
+        self.add_to_program_block(
+            code=f"(ADD, {self.symbol_table.stack_pointer}, #{function_memory[-1].frame_size + 4}, {return_address})")
+
+        i = 0
+        while i < len(arguments):
+
+            if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.var_type == 'int':
+                self.semantic_check('argument_type', function_symbol.lexeme, i + 1, 'array', 'int')
+            elif function_signature[function_symbol.lexeme][3 * i + 2] != 'array' and arg.var_type == 'int*':
+                self.semantic_check('argument_type', function_symbol.lexeme, i + 1, 'int', 'array')
+
+            argument_address = self.symbol_table.get_simple_temp()
+
+            self.add_to_program_block(
+                code=f"(ADD, {new_symbol_table.stack_pointer}, #{function_memory[-1].frame_size + 8 + i * 4},"
+                     f" {arg_address_pointer})")
+
+            self.add_to_program_block(code=f"(ASSIGN, {get_symbol_address(arg)}, @{arg_address_pointer}, )")
+
+            i += 3
+
+        self.add_to_program_block(
+            code=f"(ASSIGN, {stack_pointer_new_address}, {self.symbol_table.stack_pointer}, )")
+
+        self.add_to_program_block(code=f"(ASSIGN, #{self.program_block_counter + 2}, @{return_address}, )")
+
+        self.add_to_program_block(code=f"(JP, {function_symbol.address}, ,)")
+
+        relative_address = self.function_memory[-1].frame_size
+        function_result_address = self.get_by_relative_address(relative_address)
+        self.function_memory[-1].frame_size += 4
+
+        self.add_to_program_block(
+            code=f"(ASSIGN, {new_symbol_table.return_value_address_pointer}, {function_result_address}, )")
+
+        self.semantic_stack.append(
+            Symbol(lexeme="", var_type=function_symbol.var_type, addressing_type='relative', address=relative_address,
+                   scope=-1, symbol_type='variable')
+        )
 
     def close_function(self, string):
         #TODO
