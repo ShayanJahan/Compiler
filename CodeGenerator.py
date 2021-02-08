@@ -38,7 +38,7 @@ class Subroutines:
 
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
-        
+
     def get_by_relative_address(self, relative_address):
         tmp = self.symbol_table.get_temp()
         self.add_to_program_block(code=f"(ADD, {self.symbol_table.st_pointer}, #{relative_address}, {tmp})")
@@ -291,10 +291,11 @@ class Subroutines:
             self.function_memory[-1].frame_size += 4
             address = self.get_by_relative_address(self.function_memory[-1].frame_size)
             self.add_to_program_block(code=f'(ASSIGN, {address[1:]}, {ptr_address}, )')
-            self.function_memory[-1].frame_size += 4 * array_len
+            self.function_memory[-1].frame_size += 4 * int(array_len)
 
             symbol = Symbol(name=array_name, variable_type=f'{array_name}*', address_type='relative',
-                            address=self.function_memory[-1], scope=self.scope_stack[-1], symbol_type='variable')
+                            address=self.function_memory[-1].frame_size, scope=self.scope_stack[-1],
+                            symbol_type='variable')
             self.symbol_table.symbols.append(symbol)
         else:
             ptr_address = self.symbol_table.get_temp()
@@ -393,7 +394,6 @@ class Subroutines:
     def is_int(self, *args):
         flag = False
         for symbol in args:
-            print('$$$$$$$', symbol.name, symbol.variable_type)
             if symbol is None:
                 continue
             if symbol.variable_type == 'int*':
@@ -477,7 +477,8 @@ class Subroutines:
 
         self.semantic_stack = self.semantic_stack[:-3]
         self.add_to_program_block(code=f'(JP, {beginning_line}, , )')
-        self.program_block[condition_line] = self.program_block[condition_line].replace('?', str(self.program_block_counter))
+        self.program_block[condition_line] = self.program_block[condition_line].replace('?',
+                                                                                        str(self.program_block_counter))
         self.program_block[outer_line] = self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
         self.code_scope_stack.pop()
@@ -547,6 +548,6 @@ class Subroutines:
                 return
             st_counter = 0
             for s in self.program_block:
-                #print(s)
+                # print(s)
                 f.write(str(st_counter) + '\t' + s + '\n')
                 st_counter += 1
