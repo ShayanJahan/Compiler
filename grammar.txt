@@ -10,7 +10,7 @@ Var-declaration-prime -> [ NUM #push #define_array ] ;
 Fun-declaration-prime -> ( Params ) #define_function Compound-stmt #end_of_scope #end_of_function
 Type-specifier -> int
 Type-specifier -> void
-Params -> int #push ID #push Param-prime #add_param Param-list
+Params -> int #push ID #push Param-prime Param-list
 Params -> void Param-list-void-abtar
 Param-list-void-abtar -> ID Param-prime Param-list
 Param-list-void-abtar -> ε
@@ -81,7 +81,7 @@ Var-call-prime -> #function_call_start ( Args ) #function_call
 Var-call-prime -> Var-prime
 Var-prime -> [ Expression ] #find_array_index_address
 Var-prime -> ε
-Factor-prime -> function_call_start ( Args ) #function_call
+Factor-prime -> #function_call_start ( Args ) #function_call
 Factor-prime -> ε
 Factor-zegond -> ( Expression )
 Factor-zegond -> NUM #push_number

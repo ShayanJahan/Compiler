@@ -158,6 +158,8 @@ class Subroutines:
             self.add_to_program_block(code="(JP, ?, , )")
             self.semantic_stack.append(self.program_block_counter - 1)
 
+        #print(self.scope_counter)
+        #print(len(self.scope_stack))
         self.symbol_table.add_symbol(Symbol(function_name, function_type, "code_line", self.program_block_counter,
                                             'function', self.scope_stack[-1], arguments_number))
 
