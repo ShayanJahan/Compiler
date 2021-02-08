@@ -4,601 +4,346 @@ Program
 │   │   ├── Declaration-initial
 │   │   │   ├── Type-specifier
 │   │   │   │   └── (KEYWORD, void)
-│   │   │   ├── (ID, main)
-│   │   │   └── #define_variable
+│   │   │   ├── #push
+│   │   │   ├── (ID, foo)
+│   │   │   └── #push
 │   │   └── Declaration-prime
+│   │       ├── #function_start
 │   │       └── Fun-declaration-prime
 │   │           ├── (SYMBOL, ()
 │   │           ├── Params
-│   │           │   ├── (KEYWORD, void)
-│   │           │   └── Param-list-void-abtar
+│   │           │   ├── (KEYWORD, int)
+│   │           │   ├── #push
+│   │           │   ├── (ID, x)
+│   │           │   ├── #push
+│   │           │   ├── Param-prime
+│   │           │   │   ├── epsilon
+│   │           │   │   └── #push_non_type
+│   │           │   └── Param-list
 │   │           │       └── epsilon
 │   │           ├── (SYMBOL, ))
-│   │           └── Compound-stmt
-│   │               ├── (SYMBOL, {)
-│   │               ├── Declaration-list
-│   │               │   ├── Declaration
-│   │               │   │   ├── Declaration-initial
-│   │               │   │   │   ├── Type-specifier
-│   │               │   │   │   │   └── (KEYWORD, int)
-│   │               │   │   │   ├── (ID, n)
-│   │               │   │   │   └── #define_variable
-│   │               │   │   └── Declaration-prime
-│   │               │   │       └── Var-declaration-prime
-│   │               │   │           └── (SYMBOL, ;)
-│   │               │   └── Declaration-list
-│   │               │       ├── Declaration
-│   │               │       │   ├── Declaration-initial
-│   │               │       │   │   ├── Type-specifier
-│   │               │       │   │   │   └── (KEYWORD, int)
-│   │               │       │   │   ├── (ID, sum)
-│   │               │       │   │   └── #define_variable
-│   │               │       │   └── Declaration-prime
-│   │               │       │       └── Var-declaration-prime
-│   │               │       │           └── (SYMBOL, ;)
-│   │               │       └── Declaration-list
-│   │               │           ├── Declaration
-│   │               │           │   ├── Declaration-initial
-│   │               │           │   │   ├── Type-specifier
-│   │               │           │   │   │   └── (KEYWORD, int)
-│   │               │           │   │   ├── (ID, i)
-│   │               │           │   │   └── #define_variable
-│   │               │           │   └── Declaration-prime
-│   │               │           │       └── Var-declaration-prime
-│   │               │           │           └── (SYMBOL, ;)
-│   │               │           └── Declaration-list
-│   │               │               ├── Declaration
-│   │               │               │   ├── Declaration-initial
-│   │               │               │   │   ├── Type-specifier
-│   │               │               │   │   │   └── (KEYWORD, int)
-│   │               │               │   │   ├── (ID, t)
-│   │               │               │   │   └── #define_variable
-│   │               │               │   └── Declaration-prime
-│   │               │               │       └── Var-declaration-prime
-│   │               │               │           └── (SYMBOL, ;)
-│   │               │               └── Declaration-list
-│   │               │                   ├── Declaration
-│   │               │                   │   ├── Declaration-initial
-│   │               │                   │   │   ├── Type-specifier
-│   │               │                   │   │   │   └── (KEYWORD, int)
-│   │               │                   │   │   ├── (ID, a)
-│   │               │                   │   │   └── #define_variable
-│   │               │                   │   └── Declaration-prime
-│   │               │                   │       └── Var-declaration-prime
-│   │               │                   │           └── (SYMBOL, ;)
-│   │               │                   └── Declaration-list
-│   │               │                       └── epsilon
-│   │               ├── Statement-list
-│   │               │   ├── Statement
-│   │               │   │   └── Expression-stmt
-│   │               │   │       ├── Expression
-│   │               │   │       │   ├── (ID, i)
-│   │               │   │       │   ├── #push_id
-│   │               │   │       │   └── B
-│   │               │   │       │       ├── (SYMBOL, =)
-│   │               │   │       │       ├── Expression
-│   │               │   │       │       │   └── Simple-expression-zegond
-│   │               │   │       │       │       ├── Additive-expression-zegond
-│   │               │   │       │       │       │   ├── Term-zegond
-│   │               │   │       │       │       │   │   ├── Signed-factor-zegond
-│   │               │   │       │       │       │   │   │   └── Factor-zegond
-│   │               │   │       │       │       │   │   │       ├── (NUM, 1)
-│   │               │   │       │       │       │   │   │       └── #push_number
-│   │               │   │       │       │       │   │   └── G
-│   │               │   │       │       │       │   │       └── epsilon
-│   │               │   │       │       │       │   └── D
-│   │               │   │       │       │       │       └── epsilon
-│   │               │   │       │       │       └── C
-│   │               │   │       │       │           └── epsilon
-│   │               │   │       │       └── #assign
-│   │               │   │       ├── #pop_number
-│   │               │   │       └── (SYMBOL, ;)
-│   │               │   └── Statement-list
-│   │               │       ├── Statement
-│   │               │       │   └── Expression-stmt
-│   │               │       │       ├── Expression
-│   │               │       │       │   ├── (ID, n)
-│   │               │       │       │   ├── #push_id
-│   │               │       │       │   └── B
-│   │               │       │       │       ├── (SYMBOL, =)
-│   │               │       │       │       ├── Expression
-│   │               │       │       │       │   └── Simple-expression-zegond
-│   │               │       │       │       │       ├── Additive-expression-zegond
-│   │               │       │       │       │       │   ├── Term-zegond
-│   │               │       │       │       │       │   │   ├── Signed-factor-zegond
-│   │               │       │       │       │       │   │   │   └── Factor-zegond
-│   │               │       │       │       │       │   │   │       ├── (NUM, 501)
-│   │               │       │       │       │       │   │   │       └── #push_number
-│   │               │       │       │       │       │   │   └── G
-│   │               │       │       │       │       │   │       └── epsilon
-│   │               │       │       │       │       │   └── D
-│   │               │       │       │       │       │       └── epsilon
-│   │               │       │       │       │       └── C
-│   │               │       │       │       │           └── epsilon
-│   │               │       │       │       └── #assign
-│   │               │       │       ├── #pop_number
-│   │               │       │       └── (SYMBOL, ;)
-│   │               │       └── Statement-list
-│   │               │           ├── Statement
-│   │               │           │   └── Iteration-stmt
-│   │               │           │       ├── (KEYWORD, while)
-│   │               │           │       ├── (SYMBOL, ()
-│   │               │           │       ├── #label
-│   │               │           │       ├── Expression
-│   │               │           │       │   ├── (ID, i)
-│   │               │           │       │   ├── #push_id
-│   │               │           │       │   └── B
-│   │               │           │       │       └── Simple-expression-prime
-│   │               │           │       │           ├── Additive-expression-prime
-│   │               │           │       │           │   ├── Term-prime
-│   │               │           │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │           │   │   │   └── Factor-prime
-│   │               │           │       │           │   │   │       └── epsilon
-│   │               │           │       │           │   │   └── G
-│   │               │           │       │           │   │       └── epsilon
-│   │               │           │       │           │   └── D
-│   │               │           │       │           │       └── epsilon
-│   │               │           │       │           └── C
-│   │               │           │       │               ├── Relop
-│   │               │           │       │               │   ├── (SYMBOL, <)
-│   │               │           │       │               │   └── #LT
-│   │               │           │       │               ├── Additive-expression
-│   │               │           │       │               │   ├── Term
-│   │               │           │       │               │   │   ├── Signed-factor
-│   │               │           │       │               │   │   │   └── Factor
-│   │               │           │       │               │   │   │       ├── (ID, n)
-│   │               │           │       │               │   │   │       ├── #push_id
-│   │               │           │       │               │   │   │       └── Var-call-prime
-│   │               │           │       │               │   │   │           └── Var-prime
-│   │               │           │       │               │   │   │               └── epsilon
-│   │               │           │       │               │   │   └── G
-│   │               │           │       │               │   │       └── epsilon
-│   │               │           │       │               │   └── D
-│   │               │           │       │               │       └── epsilon
-│   │               │           │       │               └── #add_or_sub_or_compare
-│   │               │           │       ├── (SYMBOL, ))
-│   │               │           │       ├── #save_address
-│   │               │           │       ├── Statement
-│   │               │           │       │   └── Compound-stmt
-│   │               │           │       │       ├── (SYMBOL, {)
-│   │               │           │       │       ├── Declaration-list
-│   │               │           │       │       │   └── epsilon
-│   │               │           │       │       ├── Statement-list
-│   │               │           │       │       │   ├── Statement
-│   │               │           │       │       │   │   └── Expression-stmt
-│   │               │           │       │       │   │       ├── Expression
-│   │               │           │       │       │   │       │   ├── (ID, t)
-│   │               │           │       │       │   │       │   ├── #push_id
-│   │               │           │       │       │   │       │   └── B
-│   │               │           │       │       │   │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │   │       │       ├── Expression
-│   │               │           │       │       │   │       │       │   ├── (ID, i)
-│   │               │           │       │       │   │       │       │   ├── #push_id
-│   │               │           │       │       │   │       │       │   └── B
-│   │               │           │       │       │   │       │       │       └── Simple-expression-prime
-│   │               │           │       │       │   │       │       │           ├── Additive-expression-prime
-│   │               │           │       │       │   │       │       │           │   ├── Term-prime
-│   │               │           │       │       │   │       │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │   │       │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │   │       │       │           │   │   │       └── epsilon
-│   │               │           │       │       │   │       │       │           │   │   └── G
-│   │               │           │       │       │   │       │       │           │   │       └── epsilon
-│   │               │           │       │       │   │       │       │           │   └── D
-│   │               │           │       │       │   │       │       │           │       └── epsilon
-│   │               │           │       │       │   │       │       │           └── C
-│   │               │           │       │       │   │       │       │               └── epsilon
-│   │               │           │       │       │   │       │       └── #assign
-│   │               │           │       │       │   │       ├── #pop_number
-│   │               │           │       │       │   │       └── (SYMBOL, ;)
-│   │               │           │       │       │   └── Statement-list
-│   │               │           │       │       │       ├── Statement
-│   │               │           │       │       │       │   └── Expression-stmt
-│   │               │           │       │       │       │       ├── Expression
-│   │               │           │       │       │       │       │   ├── (ID, sum)
-│   │               │           │       │       │       │       │   ├── #push_id
-│   │               │           │       │       │       │       │   └── B
-│   │               │           │       │       │       │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │       │       │       ├── Expression
-│   │               │           │       │       │       │       │       │   └── Simple-expression-zegond
-│   │               │           │       │       │       │       │       │       ├── Additive-expression-zegond
-│   │               │           │       │       │       │       │       │       │   ├── Term-zegond
-│   │               │           │       │       │       │       │       │       │   │   ├── Signed-factor-zegond
-│   │               │           │       │       │       │       │       │       │   │   │   └── Factor-zegond
-│   │               │           │       │       │       │       │       │       │   │   │       ├── (NUM, 0)
-│   │               │           │       │       │       │       │       │       │   │   │       └── #push_number
-│   │               │           │       │       │       │       │       │       │   │   └── G
-│   │               │           │       │       │       │       │       │       │   │       └── epsilon
-│   │               │           │       │       │       │       │       │       │   └── D
-│   │               │           │       │       │       │       │       │       │       └── epsilon
-│   │               │           │       │       │       │       │       │       └── C
-│   │               │           │       │       │       │       │       │           └── epsilon
-│   │               │           │       │       │       │       │       └── #assign
-│   │               │           │       │       │       │       ├── #pop_number
-│   │               │           │       │       │       │       └── (SYMBOL, ;)
-│   │               │           │       │       │       └── Statement-list
-│   │               │           │       │       │           ├── Statement
-│   │               │           │       │       │           │   └── Iteration-stmt
-│   │               │           │       │       │           │       ├── (KEYWORD, while)
-│   │               │           │       │       │           │       ├── (SYMBOL, ()
-│   │               │           │       │       │           │       ├── #label
-│   │               │           │       │       │           │       ├── Expression
-│   │               │           │       │       │           │       │   └── Simple-expression-zegond
-│   │               │           │       │       │           │       │       ├── Additive-expression-zegond
-│   │               │           │       │       │           │       │       │   ├── Term-zegond
-│   │               │           │       │       │           │       │       │   │   ├── Signed-factor-zegond
-│   │               │           │       │       │           │       │       │   │   │   └── Factor-zegond
-│   │               │           │       │       │           │       │       │   │   │       ├── (NUM, 0)
-│   │               │           │       │       │           │       │       │   │   │       └── #push_number
-│   │               │           │       │       │           │       │       │   │   └── G
-│   │               │           │       │       │           │       │       │   │       └── epsilon
-│   │               │           │       │       │           │       │       │   └── D
-│   │               │           │       │       │           │       │       │       └── epsilon
-│   │               │           │       │       │           │       │       └── C
-│   │               │           │       │       │           │       │           ├── Relop
-│   │               │           │       │       │           │       │           │   ├── (SYMBOL, <)
-│   │               │           │       │       │           │       │           │   └── #LT
-│   │               │           │       │       │           │       │           ├── Additive-expression
-│   │               │           │       │       │           │       │           │   ├── Term
-│   │               │           │       │       │           │       │           │   │   ├── Signed-factor
-│   │               │           │       │       │           │       │           │   │   │   └── Factor
-│   │               │           │       │       │           │       │           │   │   │       ├── (ID, t)
-│   │               │           │       │       │           │       │           │   │   │       ├── #push_id
-│   │               │           │       │       │           │       │           │   │   │       └── Var-call-prime
-│   │               │           │       │       │           │       │           │   │   │           └── Var-prime
-│   │               │           │       │       │           │       │           │   │   │               └── epsilon
-│   │               │           │       │       │           │       │           │   │   └── G
-│   │               │           │       │       │           │       │           │   │       └── epsilon
-│   │               │           │       │       │           │       │           │   └── D
-│   │               │           │       │       │           │       │           │       └── epsilon
-│   │               │           │       │       │           │       │           └── #add_or_sub_or_compare
-│   │               │           │       │       │           │       ├── (SYMBOL, ))
-│   │               │           │       │       │           │       ├── #save_address
-│   │               │           │       │       │           │       ├── Statement
-│   │               │           │       │       │           │       │   └── Compound-stmt
-│   │               │           │       │       │           │       │       ├── (SYMBOL, {)
-│   │               │           │       │       │           │       │       ├── Declaration-list
-│   │               │           │       │       │           │       │       │   └── epsilon
-│   │               │           │       │       │           │       │       ├── Statement-list
-│   │               │           │       │       │           │       │       │   ├── Statement
-│   │               │           │       │       │           │       │       │   │   └── Iteration-stmt
-│   │               │           │       │       │           │       │       │   │       ├── (KEYWORD, while)
-│   │               │           │       │       │           │       │       │   │       ├── (SYMBOL, ()
-│   │               │           │       │       │           │       │       │   │       ├── #label
-│   │               │           │       │       │           │       │       │   │       ├── Expression
-│   │               │           │       │       │           │       │       │   │       │   └── Simple-expression-zegond
-│   │               │           │       │       │           │       │       │   │       │       ├── Additive-expression-zegond
-│   │               │           │       │       │           │       │       │   │       │       │   ├── Term-zegond
-│   │               │           │       │       │           │       │       │   │       │       │   │   ├── Signed-factor-zegond
-│   │               │           │       │       │           │       │       │   │       │       │   │   │   └── Factor-zegond
-│   │               │           │       │       │           │       │       │   │       │       │   │   │       ├── (NUM, 0)
-│   │               │           │       │       │           │       │       │   │       │       │   │   │       └── #push_number
-│   │               │           │       │       │           │       │       │   │       │       │   │   └── G
-│   │               │           │       │       │           │       │       │   │       │       │   │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   └── D
-│   │               │           │       │       │           │       │       │   │       │       │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       └── C
-│   │               │           │       │       │           │       │       │   │       │           ├── Relop
-│   │               │           │       │       │           │       │       │   │       │           │   ├── (SYMBOL, <)
-│   │               │           │       │       │           │       │       │   │       │           │   └── #LT
-│   │               │           │       │       │           │       │       │   │       │           ├── Additive-expression
-│   │               │           │       │       │           │       │       │   │       │           │   ├── Term
-│   │               │           │       │       │           │       │       │   │       │           │   │   ├── Signed-factor
-│   │               │           │       │       │           │       │       │   │       │           │   │   │   └── Factor
-│   │               │           │       │       │           │       │       │   │       │           │   │   │       ├── (ID, t)
-│   │               │           │       │       │           │       │       │   │       │           │   │   │       ├── #push_id
-│   │               │           │       │       │           │       │       │   │       │           │   │   │       └── Var-call-prime
-│   │               │           │       │       │           │       │       │   │       │           │   │   │           └── Var-prime
-│   │               │           │       │       │           │       │       │   │       │           │   │   │               └── epsilon
-│   │               │           │       │       │           │       │       │   │       │           │   │   └── G
-│   │               │           │       │       │           │       │       │   │       │           │   │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │           │   └── D
-│   │               │           │       │       │           │       │       │   │       │           │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │           └── #add_or_sub_or_compare
-│   │               │           │       │       │           │       │       │   │       ├── (SYMBOL, ))
-│   │               │           │       │       │           │       │       │   │       ├── #save_address
-│   │               │           │       │       │           │       │       │   │       ├── Statement
-│   │               │           │       │       │           │       │       │   │       │   └── Compound-stmt
-│   │               │           │       │       │           │       │       │   │       │       ├── (SYMBOL, {)
-│   │               │           │       │       │           │       │       │   │       │       ├── Declaration-list
-│   │               │           │       │       │           │       │       │   │       │       │   └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       ├── Statement-list
-│   │               │           │       │       │           │       │       │   │       │       │   ├── Statement
-│   │               │           │       │       │           │       │       │   │       │       │   │   └── Expression-stmt
-│   │               │           │       │       │           │       │       │   │       │       │   │       ├── Expression
-│   │               │           │       │       │           │       │       │   │       │       │   │       │   ├── (ID, t)
-│   │               │           │       │       │           │       │       │   │       │       │   │       │   ├── #push_id
-│   │               │           │       │       │           │       │       │   │       │       │   │       │   └── B
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       ├── Expression
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │   ├── (ID, t)
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │   ├── #push_id
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │   └── B
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │       └── Simple-expression-prime
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           ├── Additive-expression-prime
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   ├── Term-prime
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   │   │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   │   └── G
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │   └── D
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       ├── Addop
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   ├── (SYMBOL, -)
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   └── #sub_values
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       ├── Term
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   ├── Signed-factor
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   │   └── Factor
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   │       ├── (NUM, 10)
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   │       └── #push_number
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │   └── G
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       ├── #add_or_sub_or_compare
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │       └── D
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           │           └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │           └── C
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       │               └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       │   │       │       └── #assign
-│   │               │           │       │       │           │       │       │   │       │       │   │       ├── #pop_number
-│   │               │           │       │       │           │       │       │   │       │       │   │       └── (SYMBOL, ;)
-│   │               │           │       │       │           │       │       │   │       │       │   └── Statement-list
-│   │               │           │       │       │           │       │       │   │       │       │       └── epsilon
-│   │               │           │       │       │           │       │       │   │       │       └── (SYMBOL, })
-│   │               │           │       │       │           │       │       │   │       └── #while_end
-│   │               │           │       │       │           │       │       │   └── Statement-list
-│   │               │           │       │       │           │       │       │       ├── Statement
-│   │               │           │       │       │           │       │       │       │   └── Expression-stmt
-│   │               │           │       │       │           │       │       │       │       ├── Expression
-│   │               │           │       │       │           │       │       │       │       │   ├── (ID, a)
-│   │               │           │       │       │           │       │       │       │       │   ├── #push_id
-│   │               │           │       │       │           │       │       │       │       │   └── B
-│   │               │           │       │       │           │       │       │       │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │           │       │       │       │       │       ├── Expression
-│   │               │           │       │       │           │       │       │       │       │       │   └── Simple-expression-zegond
-│   │               │           │       │       │           │       │       │       │       │       │       ├── Additive-expression-zegond
-│   │               │           │       │       │           │       │       │       │       │       │       │   ├── Term-zegond
-│   │               │           │       │       │           │       │       │       │       │       │       │   │   ├── Signed-factor-zegond
-│   │               │           │       │       │           │       │       │       │       │       │       │   │   │   └── Factor-zegond
-│   │               │           │       │       │           │       │       │       │       │       │       │   │   │       ├── (NUM, 10)
-│   │               │           │       │       │           │       │       │       │       │       │       │   │   │       └── #push_number
-│   │               │           │       │       │           │       │       │       │       │       │       │   │   └── G
-│   │               │           │       │       │           │       │       │       │       │       │       │   │       └── epsilon
-│   │               │           │       │       │           │       │       │       │       │       │       │   └── D
-│   │               │           │       │       │           │       │       │       │       │       │       │       ├── Addop
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   ├── (SYMBOL, -)
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   └── #sub_values
-│   │               │           │       │       │           │       │       │       │       │       │       │       ├── Term
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   ├── Signed-factor
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   ├── (SYMBOL, -)
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   ├── Factor
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   │   ├── (ID, t)
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   │   ├── #push_id
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   │   └── Var-call-prime
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   │       └── Var-prime
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   │           └── epsilon
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   │   └── #change_sign
-│   │               │           │       │       │           │       │       │       │       │       │       │       │   └── G
-│   │               │           │       │       │           │       │       │       │       │       │       │       │       └── epsilon
-│   │               │           │       │       │           │       │       │       │       │       │       │       ├── #add_or_sub_or_compare
-│   │               │           │       │       │           │       │       │       │       │       │       │       └── D
-│   │               │           │       │       │           │       │       │       │       │       │       │           └── epsilon
-│   │               │           │       │       │           │       │       │       │       │       │       └── C
-│   │               │           │       │       │           │       │       │       │       │       │           └── epsilon
-│   │               │           │       │       │           │       │       │       │       │       └── #assign
-│   │               │           │       │       │           │       │       │       │       ├── #pop_number
-│   │               │           │       │       │           │       │       │       │       └── (SYMBOL, ;)
-│   │               │           │       │       │           │       │       │       └── Statement-list
-│   │               │           │       │       │           │       │       │           ├── Statement
-│   │               │           │       │       │           │       │       │           │   └── Expression-stmt
-│   │               │           │       │       │           │       │       │           │       ├── Expression
-│   │               │           │       │       │           │       │       │           │       │   ├── (ID, sum)
-│   │               │           │       │       │           │       │       │           │       │   ├── #push_id
-│   │               │           │       │       │           │       │       │           │       │   └── B
-│   │               │           │       │       │           │       │       │           │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │           │       │       │           │       │       ├── Expression
-│   │               │           │       │       │           │       │       │           │       │       │   ├── (ID, sum)
-│   │               │           │       │       │           │       │       │           │       │       │   ├── #push_id
-│   │               │           │       │       │           │       │       │           │       │       │   └── B
-│   │               │           │       │       │           │       │       │           │       │       │       └── Simple-expression-prime
-│   │               │           │       │       │           │       │       │           │       │       │           ├── Additive-expression-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │   ├── Term-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │   │   │       └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │   │   └── G
-│   │               │           │       │       │           │       │       │           │       │       │           │   │       └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │   └── D
-│   │               │           │       │       │           │       │       │           │       │       │           │       ├── Addop
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   ├── (SYMBOL, +)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   └── #add_values
-│   │               │           │       │       │           │       │       │           │       │       │           │       ├── Term
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   ├── Signed-factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │   └── Factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │       ├── (ID, a)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │       ├── #push_id
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │       └── Var-call-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │           └── Var-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   │               └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │       │   └── G
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       ├── (SYMBOL, *)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       ├── Signed-factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │   └── Factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │       ├── (ID, a)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │       ├── #push_id
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │       └── Var-call-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │           └── Var-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       │               └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       ├── #mult_values
-│   │               │           │       │       │           │       │       │           │       │       │           │       │       └── G
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           ├── (SYMBOL, *)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           ├── Signed-factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │   └── Factor
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │       ├── (ID, a)
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │       ├── #push_id
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │       └── Var-call-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │           └── Var-prime
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           │               └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           ├── #mult_values
-│   │               │           │       │       │           │       │       │           │       │       │           │       │           └── G
-│   │               │           │       │       │           │       │       │           │       │       │           │       │               └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           │       ├── #add_or_sub_or_compare
-│   │               │           │       │       │           │       │       │           │       │       │           │       └── D
-│   │               │           │       │       │           │       │       │           │       │       │           │           └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       │           └── C
-│   │               │           │       │       │           │       │       │           │       │       │               └── epsilon
-│   │               │           │       │       │           │       │       │           │       │       └── #assign
-│   │               │           │       │       │           │       │       │           │       ├── #pop_number
-│   │               │           │       │       │           │       │       │           │       └── (SYMBOL, ;)
-│   │               │           │       │       │           │       │       │           └── Statement-list
-│   │               │           │       │       │           │       │       │               └── epsilon
-│   │               │           │       │       │           │       │       └── (SYMBOL, })
-│   │               │           │       │       │           │       └── #while_end
-│   │               │           │       │       │           └── Statement-list
-│   │               │           │       │       │               ├── Statement
-│   │               │           │       │       │               │   └── Selection-stmt
-│   │               │           │       │       │               │       ├── (KEYWORD, if)
-│   │               │           │       │       │               │       ├── (SYMBOL, ()
-│   │               │           │       │       │               │       ├── Expression
-│   │               │           │       │       │               │       │   ├── (ID, sum)
-│   │               │           │       │       │               │       │   ├── #push_id
-│   │               │           │       │       │               │       │   └── B
-│   │               │           │       │       │               │       │       └── Simple-expression-prime
-│   │               │           │       │       │               │       │           ├── Additive-expression-prime
-│   │               │           │       │       │               │       │           │   ├── Term-prime
-│   │               │           │       │       │               │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │               │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │               │       │           │   │   │       └── epsilon
-│   │               │           │       │       │               │       │           │   │   └── G
-│   │               │           │       │       │               │       │           │   │       └── epsilon
-│   │               │           │       │       │               │       │           │   └── D
-│   │               │           │       │       │               │       │           │       └── epsilon
-│   │               │           │       │       │               │       │           └── C
-│   │               │           │       │       │               │       │               ├── Relop
-│   │               │           │       │       │               │       │               │   ├── (SYMBOL, ==)
-│   │               │           │       │       │               │       │               │   └── #EQ
-│   │               │           │       │       │               │       │               ├── Additive-expression
-│   │               │           │       │       │               │       │               │   ├── Term
-│   │               │           │       │       │               │       │               │   │   ├── Signed-factor
-│   │               │           │       │       │               │       │               │   │   │   └── Factor
-│   │               │           │       │       │               │       │               │   │   │       ├── (ID, i)
-│   │               │           │       │       │               │       │               │   │   │       ├── #push_id
-│   │               │           │       │       │               │       │               │   │   │       └── Var-call-prime
-│   │               │           │       │       │               │       │               │   │   │           └── Var-prime
-│   │               │           │       │       │               │       │               │   │   │               └── epsilon
-│   │               │           │       │       │               │       │               │   │   └── G
-│   │               │           │       │       │               │       │               │   │       └── epsilon
-│   │               │           │       │       │               │       │               │   └── D
-│   │               │           │       │       │               │       │               │       └── epsilon
-│   │               │           │       │       │               │       │               └── #add_or_sub_or_compare
-│   │               │           │       │       │               │       ├── #save_address
-│   │               │           │       │       │               │       ├── (SYMBOL, ))
-│   │               │           │       │       │               │       ├── Statement
-│   │               │           │       │       │               │       │   └── Compound-stmt
-│   │               │           │       │       │               │       │       ├── (SYMBOL, {)
-│   │               │           │       │       │               │       │       ├── Declaration-list
-│   │               │           │       │       │               │       │       │   └── epsilon
-│   │               │           │       │       │               │       │       ├── Statement-list
-│   │               │           │       │       │               │       │       │   ├── Statement
-│   │               │           │       │       │               │       │       │   │   └── Expression-stmt
-│   │               │           │       │       │               │       │       │   │       ├── Expression
-│   │               │           │       │       │               │       │       │   │       │   ├── (ID, output)
-│   │               │           │       │       │               │       │       │   │       │   ├── #push_id
-│   │               │           │       │       │               │       │       │   │       │   └── B
-│   │               │           │       │       │               │       │       │   │       │       └── Simple-expression-prime
-│   │               │           │       │       │               │       │       │   │       │           ├── Additive-expression-prime
-│   │               │           │       │       │               │       │       │   │       │           │   ├── Term-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       ├── (SYMBOL, ()
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       ├── Args
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │   └── Arg-list
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       ├── Expression
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │   ├── (ID, i)
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │   ├── #push_id
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │   └── B
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │       └── Simple-expression-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           ├── Additive-expression-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   ├── Term-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   │   │       └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   │   └── G
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   │       └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │   └── D
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           │       └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │           └── C
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       │               └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │       └── Arg-list-prime
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       │           └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       ├── (SYMBOL, ))
-│   │               │           │       │       │               │       │       │   │       │           │   │   │       └── #print_function
-│   │               │           │       │       │               │       │       │   │       │           │   │   └── G
-│   │               │           │       │       │               │       │       │   │       │           │   │       └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           │   └── D
-│   │               │           │       │       │               │       │       │   │       │           │       └── epsilon
-│   │               │           │       │       │               │       │       │   │       │           └── C
-│   │               │           │       │       │               │       │       │   │       │               └── epsilon
-│   │               │           │       │       │               │       │       │   │       ├── #pop_number
-│   │               │           │       │       │               │       │       │   │       └── (SYMBOL, ;)
-│   │               │           │       │       │               │       │       │   └── Statement-list
-│   │               │           │       │       │               │       │       │       └── epsilon
-│   │               │           │       │       │               │       │       └── (SYMBOL, })
-│   │               │           │       │       │               │       ├── #false_condition_jump
-│   │               │           │       │       │               │       ├── (KEYWORD, else)
-│   │               │           │       │       │               │       ├── Statement
-│   │               │           │       │       │               │       │   └── Compound-stmt
-│   │               │           │       │       │               │       │       ├── (SYMBOL, {)
-│   │               │           │       │       │               │       │       ├── Declaration-list
-│   │               │           │       │       │               │       │       │   └── epsilon
-│   │               │           │       │       │               │       │       ├── Statement-list
-│   │               │           │       │       │               │       │       │   └── epsilon
-│   │               │           │       │       │               │       │       └── (SYMBOL, })
-│   │               │           │       │       │               │       └── #jump
-│   │               │           │       │       │               └── Statement-list
-│   │               │           │       │       │                   ├── Statement
-│   │               │           │       │       │                   │   └── Expression-stmt
-│   │               │           │       │       │                   │       ├── Expression
-│   │               │           │       │       │                   │       │   ├── (ID, i)
-│   │               │           │       │       │                   │       │   ├── #push_id
-│   │               │           │       │       │                   │       │   └── B
-│   │               │           │       │       │                   │       │       ├── (SYMBOL, =)
-│   │               │           │       │       │                   │       │       ├── Expression
-│   │               │           │       │       │                   │       │       │   ├── (ID, i)
-│   │               │           │       │       │                   │       │       │   ├── #push_id
-│   │               │           │       │       │                   │       │       │   └── B
-│   │               │           │       │       │                   │       │       │       └── Simple-expression-prime
-│   │               │           │       │       │                   │       │       │           ├── Additive-expression-prime
-│   │               │           │       │       │                   │       │       │           │   ├── Term-prime
-│   │               │           │       │       │                   │       │       │           │   │   ├── Signed-factor-prime
-│   │               │           │       │       │                   │       │       │           │   │   │   └── Factor-prime
-│   │               │           │       │       │                   │       │       │           │   │   │       └── epsilon
-│   │               │           │       │       │                   │       │       │           │   │   └── G
-│   │               │           │       │       │                   │       │       │           │   │       └── epsilon
-│   │               │           │       │       │                   │       │       │           │   └── D
-│   │               │           │       │       │                   │       │       │           │       ├── Addop
-│   │               │           │       │       │                   │       │       │           │       │   ├── (SYMBOL, +)
-│   │               │           │       │       │                   │       │       │           │       │   └── #add_values
-│   │               │           │       │       │                   │       │       │           │       ├── Term
-│   │               │           │       │       │                   │       │       │           │       │   ├── Signed-factor
-│   │               │           │       │       │                   │       │       │           │       │   │   └── Factor
-│   │               │           │       │       │                   │       │       │           │       │   │       ├── (NUM, 1)
-│   │               │           │       │       │                   │       │       │           │       │   │       └── #push_number
-│   │               │           │       │       │                   │       │       │           │       │   └── G
-│   │               │           │       │       │                   │       │       │           │       │       └── epsilon
-│   │               │           │       │       │                   │       │       │           │       ├── #add_or_sub_or_compare
-│   │               │           │       │       │                   │       │       │           │       └── D
-│   │               │           │       │       │                   │       │       │           │           └── epsilon
-│   │               │           │       │       │                   │       │       │           └── C
-│   │               │           │       │       │                   │       │       │               └── epsilon
-│   │               │           │       │       │                   │       │       └── #assign
-│   │               │           │       │       │                   │       ├── #pop_number
-│   │               │           │       │       │                   │       └── (SYMBOL, ;)
-│   │               │           │       │       │                   └── Statement-list
-│   │               │           │       │       │                       └── epsilon
-│   │               │           │       │       └── (SYMBOL, })
-│   │               │           │       └── #while_end
-│   │               │           └── Statement-list
-│   │               │               └── epsilon
-│   │               └── (SYMBOL, })
+│   │           ├── #define_function
+│   │           ├── Compound-stmt
+│   │           │   ├── (SYMBOL, {)
+│   │           │   ├── Declaration-list
+│   │           │   │   └── epsilon
+│   │           │   ├── Statement-list
+│   │           │   │   ├── Statement
+│   │           │   │   │   └── Switch-stmt
+│   │           │   │   │       ├── (KEYWORD, switch)
+│   │           │   │   │       ├── #start_switch
+│   │           │   │   │       ├── (SYMBOL, ()
+│   │           │   │   │       ├── Expression
+│   │           │   │   │       │   ├── (ID, x)
+│   │           │   │   │       │   ├── #push_id
+│   │           │   │   │       │   └── B
+│   │           │   │   │       │       └── Simple-expression-prime
+│   │           │   │   │       │           ├── Additive-expression-prime
+│   │           │   │   │       │           │   ├── Term-prime
+│   │           │   │   │       │           │   │   ├── Signed-factor-prime
+│   │           │   │   │       │           │   │   │   └── Factor-prime
+│   │           │   │   │       │           │   │   │       └── epsilon
+│   │           │   │   │       │           │   │   └── G
+│   │           │   │   │       │           │   │       └── epsilon
+│   │           │   │   │       │           │   └── D
+│   │           │   │   │       │           │       └── epsilon
+│   │           │   │   │       │           └── C
+│   │           │   │   │       │               └── epsilon
+│   │           │   │   │       ├── (SYMBOL, ))
+│   │           │   │   │       ├── (SYMBOL, {)
+│   │           │   │   │       ├── Case-stmts
+│   │           │   │   │       │   ├── Case-stmt
+│   │           │   │   │       │   │   ├── (KEYWORD, case)
+│   │           │   │   │       │   │   ├── (NUM, 0)
+│   │           │   │   │       │   │   ├── #push_number
+│   │           │   │   │       │   │   ├── #start_case
+│   │           │   │   │       │   │   ├── (SYMBOL, :)
+│   │           │   │   │       │   │   ├── Statement-list
+│   │           │   │   │       │   │   │   ├── Statement
+│   │           │   │   │       │   │   │   │   └── Expression-stmt
+│   │           │   │   │       │   │   │   │       ├── Expression
+│   │           │   │   │       │   │   │   │       │   ├── (ID, output)
+│   │           │   │   │       │   │   │   │       │   ├── #push_id
+│   │           │   │   │       │   │   │   │       │   └── B
+│   │           │   │   │       │   │   │   │       │       └── Simple-expression-prime
+│   │           │   │   │       │   │   │   │       │           ├── Additive-expression-prime
+│   │           │   │   │       │   │   │   │       │           │   ├── Term-prime
+│   │           │   │   │       │   │   │   │       │           │   │   ├── Signed-factor-prime
+│   │           │   │   │       │   │   │   │       │           │   │   │   └── Factor-prime
+│   │           │   │   │       │   │   │   │       │           │   │   │       ├── #function_call_start
+│   │           │   │   │       │   │   │   │       │           │   │   │       ├── (SYMBOL, ()
+│   │           │   │   │       │   │   │   │       │           │   │   │       ├── Args
+│   │           │   │   │       │   │   │   │       │           │   │   │       │   └── Arg-list
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       ├── Expression
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │   └── Simple-expression-zegond
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       ├── Additive-expression-zegond
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   ├── Term-zegond
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │   ├── Signed-factor-zegond
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │   │   └── Factor-zegond
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │   │       ├── (NUM, 1)
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │   │       └── #push_number
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │   └── G
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   │       └── epsilon
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │   └── D
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       │       └── epsilon
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │       └── C
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       │           └── epsilon
+│   │           │   │   │       │   │   │   │       │           │   │   │       │       └── Arg-list-prime
+│   │           │   │   │       │   │   │   │       │           │   │   │       │           └── epsilon
+│   │           │   │   │       │   │   │   │       │           │   │   │       ├── (SYMBOL, ))
+│   │           │   │   │       │   │   │   │       │           │   │   │       └── #function_call
+│   │           │   │   │       │   │   │   │       │           │   │   └── G
+│   │           │   │   │       │   │   │   │       │           │   │       └── epsilon
+│   │           │   │   │       │   │   │   │       │           │   └── D
+│   │           │   │   │       │   │   │   │       │           │       └── epsilon
+│   │           │   │   │       │   │   │   │       │           └── C
+│   │           │   │   │       │   │   │   │       │               └── epsilon
+│   │           │   │   │       │   │   │   │       ├── #pop_number
+│   │           │   │   │       │   │   │   │       └── (SYMBOL, ;)
+│   │           │   │   │       │   │   │   └── Statement-list
+│   │           │   │   │       │   │   │       └── epsilon
+│   │           │   │   │       │   │   └── #end_case
+│   │           │   │   │       │   └── Case-stmts
+│   │           │   │   │       │       ├── Case-stmt
+│   │           │   │   │       │       │   ├── (KEYWORD, case)
+│   │           │   │   │       │       │   ├── (NUM, 1)
+│   │           │   │   │       │       │   ├── #push_number
+│   │           │   │   │       │       │   ├── #start_case
+│   │           │   │   │       │       │   ├── (SYMBOL, :)
+│   │           │   │   │       │       │   ├── Statement-list
+│   │           │   │   │       │       │   │   ├── Statement
+│   │           │   │   │       │       │   │   │   └── Expression-stmt
+│   │           │   │   │       │       │   │   │       ├── Expression
+│   │           │   │   │       │       │   │   │       │   ├── (ID, output)
+│   │           │   │   │       │       │   │   │       │   ├── #push_id
+│   │           │   │   │       │       │   │   │       │   └── B
+│   │           │   │   │       │       │   │   │       │       └── Simple-expression-prime
+│   │           │   │   │       │       │   │   │       │           ├── Additive-expression-prime
+│   │           │   │   │       │       │   │   │       │           │   ├── Term-prime
+│   │           │   │   │       │       │   │   │       │           │   │   ├── Signed-factor-prime
+│   │           │   │   │       │       │   │   │       │           │   │   │   └── Factor-prime
+│   │           │   │   │       │       │   │   │       │           │   │   │       ├── #function_call_start
+│   │           │   │   │       │       │   │   │       │           │   │   │       ├── (SYMBOL, ()
+│   │           │   │   │       │       │   │   │       │           │   │   │       ├── Args
+│   │           │   │   │       │       │   │   │       │           │   │   │       │   └── Arg-list
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       ├── Expression
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │   └── Simple-expression-zegond
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       ├── Additive-expression-zegond
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   ├── Term-zegond
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │   ├── Signed-factor-zegond
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │   │   └── Factor-zegond
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │   │       ├── (NUM, 2)
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │   │       └── #push_number
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │   └── G
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   │       └── epsilon
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │   └── D
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       │       └── epsilon
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │       └── C
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       │           └── epsilon
+│   │           │   │   │       │       │   │   │       │           │   │   │       │       └── Arg-list-prime
+│   │           │   │   │       │       │   │   │       │           │   │   │       │           └── epsilon
+│   │           │   │   │       │       │   │   │       │           │   │   │       ├── (SYMBOL, ))
+│   │           │   │   │       │       │   │   │       │           │   │   │       └── #function_call
+│   │           │   │   │       │       │   │   │       │           │   │   └── G
+│   │           │   │   │       │       │   │   │       │           │   │       └── epsilon
+│   │           │   │   │       │       │   │   │       │           │   └── D
+│   │           │   │   │       │       │   │   │       │           │       └── epsilon
+│   │           │   │   │       │       │   │   │       │           └── C
+│   │           │   │   │       │       │   │   │       │               └── epsilon
+│   │           │   │   │       │       │   │   │       ├── #pop_number
+│   │           │   │   │       │       │   │   │       └── (SYMBOL, ;)
+│   │           │   │   │       │       │   │   └── Statement-list
+│   │           │   │   │       │       │   │       ├── Statement
+│   │           │   │   │       │       │   │       │   └── Expression-stmt
+│   │           │   │   │       │       │   │       │       ├── (KEYWORD, break)
+│   │           │   │   │       │       │   │       │       ├── #break_command
+│   │           │   │   │       │       │   │       │       └── (SYMBOL, ;)
+│   │           │   │   │       │       │   │       └── Statement-list
+│   │           │   │   │       │       │   │           └── epsilon
+│   │           │   │   │       │       │   └── #end_case
+│   │           │   │   │       │       └── Case-stmts
+│   │           │   │   │       │           ├── Case-stmt
+│   │           │   │   │       │           │   ├── (KEYWORD, case)
+│   │           │   │   │       │           │   ├── (NUM, 3)
+│   │           │   │   │       │           │   ├── #push_number
+│   │           │   │   │       │           │   ├── #start_case
+│   │           │   │   │       │           │   ├── (SYMBOL, :)
+│   │           │   │   │       │           │   ├── Statement-list
+│   │           │   │   │       │           │   │   ├── Statement
+│   │           │   │   │       │           │   │   │   └── Expression-stmt
+│   │           │   │   │       │           │   │   │       ├── Expression
+│   │           │   │   │       │           │   │   │       │   ├── (ID, output)
+│   │           │   │   │       │           │   │   │       │   ├── #push_id
+│   │           │   │   │       │           │   │   │       │   └── B
+│   │           │   │   │       │           │   │   │       │       └── Simple-expression-prime
+│   │           │   │   │       │           │   │   │       │           ├── Additive-expression-prime
+│   │           │   │   │       │           │   │   │       │           │   ├── Term-prime
+│   │           │   │   │       │           │   │   │       │           │   │   ├── Signed-factor-prime
+│   │           │   │   │       │           │   │   │       │           │   │   │   └── Factor-prime
+│   │           │   │   │       │           │   │   │       │           │   │   │       ├── #function_call_start
+│   │           │   │   │       │           │   │   │       │           │   │   │       ├── (SYMBOL, ()
+│   │           │   │   │       │           │   │   │       │           │   │   │       ├── Args
+│   │           │   │   │       │           │   │   │       │           │   │   │       │   └── Arg-list
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       ├── Expression
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │   └── Simple-expression-zegond
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       ├── Additive-expression-zegond
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   ├── Term-zegond
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │   ├── Signed-factor-zegond
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │   │   └── Factor-zegond
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │   │       ├── (NUM, 3)
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │   │       └── #push_number
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │   └── G
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   │       └── epsilon
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │   └── D
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       │       └── epsilon
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │       └── C
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       │           └── epsilon
+│   │           │   │   │       │           │   │   │       │           │   │   │       │       └── Arg-list-prime
+│   │           │   │   │       │           │   │   │       │           │   │   │       │           └── epsilon
+│   │           │   │   │       │           │   │   │       │           │   │   │       ├── (SYMBOL, ))
+│   │           │   │   │       │           │   │   │       │           │   │   │       └── #function_call
+│   │           │   │   │       │           │   │   │       │           │   │   └── G
+│   │           │   │   │       │           │   │   │       │           │   │       └── epsilon
+│   │           │   │   │       │           │   │   │       │           │   └── D
+│   │           │   │   │       │           │   │   │       │           │       └── epsilon
+│   │           │   │   │       │           │   │   │       │           └── C
+│   │           │   │   │       │           │   │   │       │               └── epsilon
+│   │           │   │   │       │           │   │   │       ├── #pop_number
+│   │           │   │   │       │           │   │   │       └── (SYMBOL, ;)
+│   │           │   │   │       │           │   │   └── Statement-list
+│   │           │   │   │       │           │   │       ├── Statement
+│   │           │   │   │       │           │   │       │   └── Expression-stmt
+│   │           │   │   │       │           │   │       │       ├── (KEYWORD, break)
+│   │           │   │   │       │           │   │       │       ├── #break_command
+│   │           │   │   │       │           │   │       │       └── (SYMBOL, ;)
+│   │           │   │   │       │           │   │       └── Statement-list
+│   │           │   │   │       │           │   │           └── epsilon
+│   │           │   │   │       │           │   └── #end_case
+│   │           │   │   │       │           └── Case-stmts
+│   │           │   │   │       │               └── epsilon
+│   │           │   │   │       ├── Default-stmt
+│   │           │   │   │       │   ├── (KEYWORD, default)
+│   │           │   │   │       │   ├── (SYMBOL, :)
+│   │           │   │   │       │   └── Statement-list
+│   │           │   │   │       │       ├── Statement
+│   │           │   │   │       │       │   └── Expression-stmt
+│   │           │   │   │       │       │       ├── Expression
+│   │           │   │   │       │       │       │   ├── (ID, output)
+│   │           │   │   │       │       │       │   ├── #push_id
+│   │           │   │   │       │       │       │   └── B
+│   │           │   │   │       │       │       │       └── Simple-expression-prime
+│   │           │   │   │       │       │       │           ├── Additive-expression-prime
+│   │           │   │   │       │       │       │           │   ├── Term-prime
+│   │           │   │   │       │       │       │           │   │   ├── Signed-factor-prime
+│   │           │   │   │       │       │       │           │   │   │   └── Factor-prime
+│   │           │   │   │       │       │       │           │   │   │       ├── #function_call_start
+│   │           │   │   │       │       │       │           │   │   │       ├── (SYMBOL, ()
+│   │           │   │   │       │       │       │           │   │   │       ├── Args
+│   │           │   │   │       │       │       │           │   │   │       │   └── Arg-list
+│   │           │   │   │       │       │       │           │   │   │       │       ├── Expression
+│   │           │   │   │       │       │       │           │   │   │       │       │   └── Simple-expression-zegond
+│   │           │   │   │       │       │       │           │   │   │       │       │       ├── Additive-expression-zegond
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   ├── Term-zegond
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │   ├── Signed-factor-zegond
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │   │   └── Factor-zegond
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │   │       ├── (NUM, 4)
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │   │       └── #push_number
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │   └── G
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   │       └── epsilon
+│   │           │   │   │       │       │       │           │   │   │       │       │       │   └── D
+│   │           │   │   │       │       │       │           │   │   │       │       │       │       └── epsilon
+│   │           │   │   │       │       │       │           │   │   │       │       │       └── C
+│   │           │   │   │       │       │       │           │   │   │       │       │           └── epsilon
+│   │           │   │   │       │       │       │           │   │   │       │       └── Arg-list-prime
+│   │           │   │   │       │       │       │           │   │   │       │           └── epsilon
+│   │           │   │   │       │       │       │           │   │   │       ├── (SYMBOL, ))
+│   │           │   │   │       │       │       │           │   │   │       └── #function_call
+│   │           │   │   │       │       │       │           │   │   └── G
+│   │           │   │   │       │       │       │           │   │       └── epsilon
+│   │           │   │   │       │       │       │           │   └── D
+│   │           │   │   │       │       │       │           │       └── epsilon
+│   │           │   │   │       │       │       │           └── C
+│   │           │   │   │       │       │       │               └── epsilon
+│   │           │   │   │       │       │       ├── #pop_number
+│   │           │   │   │       │       │       └── (SYMBOL, ;)
+│   │           │   │   │       │       └── Statement-list
+│   │           │   │   │       │           └── epsilon
+│   │           │   │   │       ├── (SYMBOL, })
+│   │           │   │   │       └── #end_switch
+│   │           │   │   └── Statement-list
+│   │           │   │       └── epsilon
+│   │           │   └── (SYMBOL, })
+│   │           ├── #end_of_scope
+│   │           └── #end_of_function
 │   └── Declaration-list
-│       └── epsilon
+│       ├── Declaration
+│       │   ├── Declaration-initial
+│       │   │   ├── Type-specifier
+│       │   │   │   └── (KEYWORD, void)
+│       │   │   ├── #push
+│       │   │   ├── (ID, main)
+│       │   │   └── #push
+│       │   └── Declaration-prime
+│       │       ├── #function_start
+│       │       └── Fun-declaration-prime
+│       │           ├── (SYMBOL, ()
+│       │           ├── Params
+│       │           │   ├── (KEYWORD, void)
+│       │           │   └── Param-list-void-abtar
+│       │           │       └── epsilon
+│       │           ├── (SYMBOL, ))
+│       │           ├── #define_function
+│       │           ├── Compound-stmt
+│       │           │   ├── (SYMBOL, {)
+│       │           │   ├── Declaration-list
+│       │           │   │   └── epsilon
+│       │           │   ├── Statement-list
+│       │           │   │   ├── Statement
+│       │           │   │   │   └── Expression-stmt
+│       │           │   │   │       ├── Expression
+│       │           │   │   │       │   ├── (ID, foo)
+│       │           │   │   │       │   ├── #push_id
+│       │           │   │   │       │   └── B
+│       │           │   │   │       │       └── Simple-expression-prime
+│       │           │   │   │       │           ├── Additive-expression-prime
+│       │           │   │   │       │           │   ├── Term-prime
+│       │           │   │   │       │           │   │   ├── Signed-factor-prime
+│       │           │   │   │       │           │   │   │   └── Factor-prime
+│       │           │   │   │       │           │   │   │       ├── #function_call_start
+│       │           │   │   │       │           │   │   │       ├── (SYMBOL, ()
+│       │           │   │   │       │           │   │   │       ├── Args
+│       │           │   │   │       │           │   │   │       │   └── Arg-list
+│       │           │   │   │       │           │   │   │       │       ├── Expression
+│       │           │   │   │       │           │   │   │       │       │   └── Simple-expression-zegond
+│       │           │   │   │       │           │   │   │       │       │       ├── Additive-expression-zegond
+│       │           │   │   │       │           │   │   │       │       │       │   ├── Term-zegond
+│       │           │   │   │       │           │   │   │       │       │       │   │   ├── Signed-factor-zegond
+│       │           │   │   │       │           │   │   │       │       │       │   │   │   └── Factor-zegond
+│       │           │   │   │       │           │   │   │       │       │       │   │   │       ├── (NUM, 3)
+│       │           │   │   │       │           │   │   │       │       │       │   │   │       └── #push_number
+│       │           │   │   │       │           │   │   │       │       │       │   │   └── G
+│       │           │   │   │       │           │   │   │       │       │       │   │       └── epsilon
+│       │           │   │   │       │           │   │   │       │       │       │   └── D
+│       │           │   │   │       │           │   │   │       │       │       │       └── epsilon
+│       │           │   │   │       │           │   │   │       │       │       └── C
+│       │           │   │   │       │           │   │   │       │       │           └── epsilon
+│       │           │   │   │       │           │   │   │       │       └── Arg-list-prime
+│       │           │   │   │       │           │   │   │       │           └── epsilon
+│       │           │   │   │       │           │   │   │       ├── (SYMBOL, ))
+│       │           │   │   │       │           │   │   │       └── #function_call
+│       │           │   │   │       │           │   │   └── G
+│       │           │   │   │       │           │   │       └── epsilon
+│       │           │   │   │       │           │   └── D
+│       │           │   │   │       │           │       └── epsilon
+│       │           │   │   │       │           └── C
+│       │           │   │   │       │               └── epsilon
+│       │           │   │   │       ├── #pop_number
+│       │           │   │   │       └── (SYMBOL, ;)
+│       │           │   │   └── Statement-list
+│       │           │   │       └── epsilon
+│       │           │   └── (SYMBOL, })
+│       │           ├── #end_of_scope
+│       │           └── #end_of_function
+│       └── Declaration-list
+│           └── epsilon
 └── (END OF FILE, $)

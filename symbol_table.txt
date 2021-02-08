@@ -8,10 +8,7 @@
 8.	default
 9.	case
 10.	return
-11.	main
-12.	n
-13.	sum
-14.	i
-15.	t
-16.	a
-17.	output
+11.	foo
+12.	x
+13.	output
+14.	main

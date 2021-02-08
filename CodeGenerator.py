@@ -3,9 +3,9 @@ from SemanticChecker import SemanticChecker
 
 
 class FunctionEntry:
-    def __init__(self, *, frame_size, lexeme):
+    def __init__(self, *, frame_size, name):
         self.frame_size = frame_size
-        self.lexeme = lexeme
+        self.name = name
 
 
 class Subroutines:
@@ -167,7 +167,7 @@ class Subroutines:
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
 
-        self.function_memory.append(FunctionEntry(frame_size=8, lexeme=function_name))
+        self.function_memory.append(FunctionEntry(frame_size=8, name=function_name))
 
         self.function_signature[function_name] = arguments
 
