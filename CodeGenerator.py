@@ -23,8 +23,7 @@ class Subroutines:
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
-        self.symbol_table.add_symbol(
-            Symbol('output', 'void', "none", 0, 'function', 0, 1)
+        self.symbol_table.add_symbol(Symbol('output', 'void', 'none', 0, 'function', 0, 1))
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -124,12 +123,9 @@ class Subroutines:
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.return_address}, {function_result_address}, )")
 
-        self.semantic_stack.append(
-            Symbol(lexeme="", var_type=function_symbol.var_type, addressing_type='relative', address=relative_address,
-                   scope=-1, symbol_type='variable')
-        )
+        self.semantic_stack.append(Symbol("", function_symbol.type, 'relative', relative_address, -1, 'variable'))
 
-    def close_function(self, string):
+    def close_function(self):
         return_address = self.symbol_table.get_temp()
         self.add_to_program_block(
             code=f"(ADD, {self.symbol_table.st_pointer}, #4, {return_address})")
@@ -202,14 +198,14 @@ class Subroutines:
         self.close_function()
 
     def end_of_scope(self, string):
-        self.symbol_table.remove_scope(scope_number=self.scope_stack.pop())
+        self.symbol_table.delete_scope(self.scope_stack.pop())
 
     def end_of_function(self, string):
         function_values = self.function_memory.pop()
         if function_values.lexeme != 'main':
             self.close_function()
-            function_jump_line_in_PB = self.semantic_stack.pop()
-            self.update_program_block(line=function_jump_line_in_PB, str(self.program_block_counter))
+            function_jump_line_in_program_block = self.semantic_stack.pop()
+            self.update_program_block(function_jump_line_in_program_block, str(self.program_block_counter))
 
     def function_call(self, string):
         arguments = []
@@ -221,7 +217,7 @@ class Subroutines:
         self.semantic_stack.pop()
         function_symbol = self.semantic_stack.pop()
 
-        self.call_function(function_symbol, argument)
+        self.call_function(function_symbol, arguments)
 
 
     def push_number(self, string):
