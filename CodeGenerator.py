@@ -166,7 +166,7 @@ class Subroutines:
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
 
-        self.function_memory.append(FunctionEntry(8, function_name))
+        self.function_memory.append(FunctionEntry(frame_size=8, name=function_name))
 
         self.function_signature[function_name] = arguments
 

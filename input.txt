@@ -1,12 +1,20 @@
-/*===== Sample 1 =====*/
-int foo(int x){
-	output(x);
-	return 1;
+/*===== sample 3 =====*/
+void foo(int x){
+	switch(x){
+	case 0:
+		output(1);
+	case 1:
+		output(2);
+		break;
+	case 3:
+		output(3);
+		break;
+	default:
+		output(4);
+	}
 }
-void main(void){
-	int i;	
-	i= foo(0);
-	output(i);
-	i=foo(10);
-	output(i);
+void main ( void )
+{
+     foo (3) ;
 }
+
