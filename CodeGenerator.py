@@ -494,7 +494,7 @@ class Subroutines:
         if self.is_int(A):
             return
 
-        A = self.find_symbol_address(self.semantic_stack[-1])
+        A = self.find_symbol_address(A)
         relative_address = self.function_memory[-1].frame_size
         result = self.get_by_relative_address(relative_address)
         self.function_memory[-1].frame_size += 4
