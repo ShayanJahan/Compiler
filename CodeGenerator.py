@@ -54,13 +54,13 @@ class Subroutines:
         # if symbol.type == 'function':
         #    raise Exception('extracting address from function')
 
-        if symbol.addressing_type == 'global':
+        if symbol.address_type == 'global':
             return symbol.address
 
-        if symbol.addressing_type == 'relative':
+        if symbol.address_type == 'relative':
             return self.get_by_relative_address(symbol.address)
 
-        if symbol.addressing_type == 'relative pointer':
+        if symbol.address_type == 'relative pointer':
             return self.at_at_to_at(self.get_by_relative_address(symbol.address))
 
         # raise Exception("hendelll")
