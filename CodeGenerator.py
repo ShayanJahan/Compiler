@@ -1,4 +1,5 @@
 from SymbolTable import SymbolTable
+from SemanticChecker import SemanticChecker
 
 class FunctionEntry:
     def __init__(self, *, frame_size: int, lexeme: str):
@@ -12,7 +13,7 @@ class Subroutines:
         self.symbol_table = SymbolTable()
         self.program_block = list()
         self.program_block_counter = 0
-        self.semantic_checker = semantic_checker
+        self.semantic_checker = SemanticChecker()
         self.scope_stack = [0]
         self.scope_counter = 1
         self.function_memory = []
@@ -42,7 +43,7 @@ class Subroutines:
             self.semantic_stack.append(None)
             return
         if len(arguments) != function_symbol.arguments_count:
-            self.semantic_check('arguments_count', function_symbol.lexeme)
+            self.semantic_checker.arguments_count_error(function_symbol.lexeme)
             self.semantic_stack.append(None)
             return
 
@@ -53,29 +54,32 @@ class Subroutines:
 
         stack_pointer_new_address = self.symbol_table.get_simple_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.stack_pointer}, #{function_memory[-1].frame_size}, {stack_pointer_new_address})")
+            code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size}, {stack_pointer_new_address})")
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.stack_pointer}, @{stack_pointer_new_address}, )")
 
         return_address = self.symbol_table.get_simple_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.stack_pointer}, #{function_memory[-1].frame_size + 4}, {return_address})")
+            code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size + 4}, {return_address})")
 
         i = 0
         while i < len(arguments):
+            argument = arguments[i]
 
             if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.var_type == 'int':
-                self.semantic_check('argument_type', function_symbol.lexeme, i + 1, 'array', 'int')
-            elif function_signature[function_symbol.lexeme][3 * i + 2] != 'array' and arg.var_type == 'int*':
-                self.semantic_check('argument_type', function_symbol.lexeme, i + 1, 'int', 'array')
+                self.semantic_checker.argument_type_error(
+                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, i + 1, 'array', 'int')
+            elif self.function_signature[function_symbol.lexeme][i + 2] != 'array' and argument.var_type == 'int*':
+                self.semantic_checker.argument_type_error(
+                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'int', 'array')
 
             argument_address = self.symbol_table.get_simple_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {new_symbol_table.stack_pointer}, #{function_memory[-1].frame_size + 8 + i * 4},"
-                     f" {arg_address_pointer})")
+                code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size + 8 + i * 4},"
+                     f" {argument_address})")
 
-            self.add_to_program_block(code=f"(ASSIGN, {get_symbol_address(arg)}, @{arg_address_pointer}, )")
+            self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
 
             i += 3
 
@@ -91,7 +95,7 @@ class Subroutines:
         self.function_memory[-1].frame_size += 4
 
         self.add_to_program_block(
-            code=f"(ASSIGN, {new_symbol_table.return_value_address_pointer}, {function_result_address}, )")
+            code=f"(ASSIGN, {self.symbol_table.return_value_address_pointer}, {function_result_address}, )")
 
         self.semantic_stack.append(
             Symbol(lexeme="", var_type=function_symbol.var_type, addressing_type='relative', address=relative_address,
