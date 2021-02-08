@@ -1,5 +1,9 @@
 from SymbolTable import SymbolTable
 
+class FunctionEntry:
+    def __init__(self, *, frame_size: int, lexeme: str):
+        self.frame_size = frame_size
+        self.lexeme = lexeme
 
 class Subroutines:
     def __init__(self, semantic_checker):
@@ -12,6 +16,7 @@ class Subroutines:
         self.scope_stack = [0]
         self.scope_counter = 1
         self.function_signature = dict()
+        self.function_memory = []
 
 
     def add_to_program_block(self, code, line=None):
