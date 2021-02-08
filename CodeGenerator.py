@@ -9,8 +9,8 @@ class Subroutines:
         self.program_block = list()
         self.program_block_counter = 0
         self.semantic_checker = semantic_checker
-        self.scope_stack = []
-        self.scope_counter = 0
+        self.scope_stack = [0]
+        self.scope_counter = 1
         self.function_signature = dict()
 
 
@@ -20,6 +20,14 @@ class Subroutines:
             self.program_block_counter += 1
         else:
             self.program_block[line] = code
+
+    def update_program_block(self, line, str):
+        self.program_block[line] = self.program_block[line].replace('?', str)
+
+    def close_function(self, string):
+        #TODO
+        pass
+
 
 
     def define_function(self, string):
@@ -40,7 +48,7 @@ class Subroutines:
             self.add_to_program_block(code="(JP, ?, , )")
             self.semantic_stack.append(self.program_block_counter - 1)
 
-        #self.symbol_table.define_symbol() TODO
+        #self.symbol_table.define_symbol(...) TODO
 
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
@@ -59,7 +67,7 @@ class Subroutines:
             if is_array:
                 symbol_type = symbol_type + '*'
 
-            #self.symbol_table.define_symbol() TODO
+            #self.symbol_table.define_symbol(...) TODO
 
             #self.function_memory[-1].frame_size TODO
 
@@ -87,7 +95,7 @@ class Subroutines:
         #if function_values.lexeme != 'main':
             #close function()
             #function_jump_line_in_PB = self.semantic_stack.pop()
-            #edit_program_line(line=function_jump_line_in_PB, replacement=str(program_block_counter))   SOON TODO
+            #update_program_block(line=function_jump_line_in_PB, str(program_block_counter))   SOON TODO
 
     def function_call(self, string):
         arguments = []
