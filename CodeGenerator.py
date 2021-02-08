@@ -70,12 +70,12 @@ class Subroutines:
             self.semantic_stack.append(None)
             return
         if len(arguments) != function_symbol.arguments_count:
-            self.semantic_checker.arguments_count_error(function_symbol.lexeme)
+            self.semantic_checker.arguments_count_error(function_symbol.name)
             self.semantic_stack.append(None)
             return
 
         if function_symbol.name == 'output':
-            self.add_to_program_block(code=f"(PRINT, {self.find_symbol_address(args[0])}, , )")
+            self.add_to_program_block(code=f"(PRINT, {self.find_symbol_address(arguments[0])}, , )")
             self.semantic_stack.append('output function void')
             return
 
@@ -93,13 +93,13 @@ class Subroutines:
         while i < len(arguments):
             argument = arguments[i]
 
-            if self.function_signature[function_symbol.lexeme][i + 2] != 'array' and argument.variable_type == 'int*':
+            if self.function_signature[function_symbol.name][i + 2] != 'array' and argument.variable_type == 'int*':
                 self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'int', 'array')
+                    self.function_signature[function_symbol.name][i], function_symbol.name, 'int', 'array')
 
-            if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.variable_type == 'int':
+            if self.function_signature[function_symbol.name][i + 2] == 'array' and argument.variable_type == 'int':
                 self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'array', 'int')
+                    self.function_signature[function_symbol.name][i], function_symbol.name, 'array', 'int')
 
             argument_address = self.symbol_table.get_temp()
 
@@ -206,7 +206,7 @@ class Subroutines:
 
     def end_of_function(self, string):
         function_values = self.function_memory.pop()
-        if function_values.lexeme != 'main':
+        if function_values.name != 'main':
             self.close_function()
             function_jump_line_in_program_block = self.semantic_stack.pop()
             self.update_program_block(function_jump_line_in_program_block, str(self.program_block_counter))
