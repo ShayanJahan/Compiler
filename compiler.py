@@ -18,6 +18,7 @@ if __name__ == '__main__':
     scanner.write_lexical_errors('lexical_errors.txt')
     scanner.write_symbol_table('symbol_table.txt')
 
+    parser.semantic_checker.write_output('semantic_errors.txt')
     parser.subroutines.write_output('output.txt')
 
     scanner.close()

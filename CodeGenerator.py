@@ -2,12 +2,13 @@ from SymbolTable import SymbolTable
 
 
 class Subroutines:
-    def __init__(self):
+    def __init__(self, semantic_checker):
         self.semantic_stack = []
         self.stack = list()
         self.symbol_table = SymbolTable()
         self.program_block = list()
         self.program_block_counter = 0
+        self.semantic_checker = semantic_checker
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -148,7 +149,11 @@ class Subroutines:
 
     def write_output(self, file_name):
         with open(file_name, 'w') as f:
+            if self.semantic_checker.errors:
+                f.write('The code has not been generated.\n')
+                return
             st_counter = 0
             for s in self.program_block:
                 f.write(str(st_counter) + '\t' + s + '\n')
                 st_counter += 1
+
