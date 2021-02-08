@@ -1,6 +1,6 @@
 class SemanticChecker:
     def __init__(self, parser):
-        self.parser = parser.scanner
+        self.parser = parser
         self.errors = list()
 
     def break_error(self):

@@ -74,7 +74,7 @@ class Subroutines:
             self.semantic_stack.append(None)
             return
 
-        if function_symbol.lexeme == 'output':
+        if function_symbol.name == 'output':
             self.add_to_program_block(code=f"(PRINT, {self.find_symbol_address(args[0])}, , )")
             self.semantic_stack.append('output function void')
             return

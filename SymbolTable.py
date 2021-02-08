@@ -1,7 +1,7 @@
 class Symbol:
     def __init__(self, name, variable_type, address_type, address, scope, symbol_type, arguments_count=0):
         self.name = name
-        self.var_type = variable_type
+        self.variable_type = variable_type
         self.address_type = address_type
         self.address = address
         self.scope = scope
