@@ -12,6 +12,7 @@ class Subroutines:
         self.scope_stack = []
         self.scope_counter = 0
         self.function_signature = dict()
+        self.scope_stack = list()
 
 
     def add_to_program_block(self, code, line=None):
@@ -216,6 +217,16 @@ class Subroutines:
         self.add_to_program_block(code=f"(MULT, {A}, {B}, {result})")
 
         self.semantic_stack.append(result)
+
+    def start_while(self, string):
+        self.scope_stack.append(('while', len(self.scope_stack)))
+        self.add_to_program_block(code=f"(JP, {self.program_block_counter + 2}, , )")
+        self.semantic_stack.append(self.program_block_counter)
+        self.add_to_program_block(code="(JP, ?, , )")
+        self.semantic_stack.append(self.program_block_counter)
+
+    def while_condition(self, string):
+        pass
 
     def change_sign(self, string):
         A = self.semantic_stack[-1]
