@@ -340,7 +340,7 @@ class Subroutines:
         self.semantic_stack.append(result)
 
     def start_while(self, string):
-        self.scope_stack.append(('while', len(self.scope_stack)))
+        self.scope_stack.append(('while', len(self.semantic_stack)))
         self.add_to_program_block(code=f"(JP, {self.program_block_counter + 2}, , )")
         self.semantic_stack.append(self.program_block_counter)
         self.add_to_program_block(code="(JP, ?, , )")
@@ -363,6 +363,34 @@ class Subroutines:
         self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
         self.scope_stack.pop()
+
+    def start_switch(self, string):
+        self.scope_stack.append(("switch", len(self.semantic_stack)))
+        self.add_to_program_block(f'(JP, {self.program_block_counter + 2}, , )')
+        self.semantic_stack.append(self.program_block_counter)
+        self.add_to_program_block(f'(JP, ?, , )')
+
+    def end_switch(self, string):
+        outer_line = self.semantic_stack[-2]
+        self.program_block[outer_line].replace('?', str(self.program_block_counter))
+
+        self.semantic_stack = self.semantic_stack[:-2]
+        self.scope_stack.pop()
+
+    def start_case(self, string):
+        case_address = self.find_symbol_address(self.semantic_stack[-1])
+        switch_address = self.find_symbol_address(self.semantic_stack[-2])
+        self.semantic_stack.pop()
+
+        result_address = self.symbol_table.get_temp()
+        self.add_to_program_block(code=f'(EQ, {case_address}, {switch_address}, {result_address})')
+        self.add_to_program_block(code=f'(JPF, {result_address}, ?, )')
+        self.semantic_stack.append(self.program_block_counter)
+
+    def end_case(self, string):
+        condition_line = self.semantic_stack[-1]
+        self.program_block[condition_line] = str(self.program_block_counter)
+        self.semantic_stack.pop()
 
     def change_sign(self, string):
         A = self.semantic_stack[-1]
