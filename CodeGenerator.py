@@ -1,8 +1,8 @@
-from SymbolTable import SymbolTable
+from SymbolTable import *
 from SemanticChecker import SemanticChecker
 
 class FunctionEntry:
-    def __init__(self, *, frame_size: int, lexeme: str):
+    def __init__(self, *, frame_size, lexeme):
         self.frame_size = frame_size
         self.lexeme = lexeme
 
@@ -23,10 +23,8 @@ class Subroutines:
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
-        self.symbol_table.define_symbol(
-            Symbol(lexeme='output', var_type='void', addressing_type="nothing",
-                   address=0, symbol_type='function', scope=0,
-                   arguments_count=1))
+        self.symbol_table.add_symbol(
+            Symbol('output', 'void', "none", 0, 'function', 0, 1)
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -162,9 +160,8 @@ class Subroutines:
             self.add_to_program_block(code="(JP, ?, , )")
             self.semantic_stack.append(self.program_block_counter - 1)
 
-        self.symbol_table.define_symbol(Symbol(lexeme=function_name, var_type=function_type, addressing_type="code_line",
-                   address=program_block_counter, symbol_type='function', scope=scope_stack[-1],
-                   arguments_count=args_count))
+        self.symbol_table.add_symbol(Symbol(function_name, function_type, "code_line", self.program_block_counter,
+                                               'function', self.scope_stack[-1], arguments_number))
 
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
@@ -176,16 +173,15 @@ class Subroutines:
         i = 0
         while i < len(arguments):
             argument_type = arguments[i]
-            argument_lexeme = arguments[i + 1]
+            argument_name = arguments[i + 1]
             is_array = arguments[i + 2]
 
-            symbol_type = argument_type
+            type = argument_type
             if is_array:
-                symbol_type = symbol_type + '*'
+                type = type + '*'
 
-            self.symbol_table.define_symbol(Symbol(lexeme=input_lexeme, var_type=var_type, addressing_type='relative',
-                       address=function_memory[-1].frame_size,
-                       scope=scope_stack[-1], symbol_type='variable'))
+            self.symbol_table.add_symbol(Symbol(argument_name, type, 'relative', self.function_memory[-1].frame_size,
+                       self.scope_stack[-1], 'variable'))
 
             self.function_memory[-1].frame_size += 4
 
