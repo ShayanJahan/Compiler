@@ -93,17 +93,18 @@ class Subroutines:
         while i < len(arguments):
             argument = arguments[i]
 
-            if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.var_type == 'int':
-                self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'array', 'int')
-            elif self.function_signature[function_symbol.lexeme][i + 2] != 'array' and argument.var_type == 'int*':
+            if self.function_signature[function_symbol.lexeme][i + 2] != 'array' and argument.variable_type == 'int*':
                 self.semantic_checker.argument_type_error(
                     self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'int', 'array')
+
+            if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.variable_type == 'int':
+                self.semantic_checker.argument_type_error(
+                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'array', 'int')
 
             argument_address = self.symbol_table.get_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i * 4},"
+                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i / 3 * 4},"
                      f" {argument_address})")
 
             self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
@@ -124,7 +125,7 @@ class Subroutines:
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.return_address}, {function_result_address}, )")
 
-        self.semantic_stack.append(Symbol("", function_symbol.type, 'relative', relative_address, -1, 'variable'))
+        self.semantic_stack.append(Symbol("", function_symbol.variable_type, 'relative', relative_address, -1, 'variable'))
 
     def close_function(self):
         return_address = self.symbol_table.get_temp()
