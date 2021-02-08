@@ -25,7 +25,7 @@ class Subroutines:
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
-        self.symbol_table.add_symbol(Symbol('output', 'void', 'none', 0, 'function', 0, 1))
+        self.symbol_table.add_symbol(Symbol('output', 'void', 'nothing', 0, 'function', 0, 1))
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -363,8 +363,8 @@ class Subroutines:
                                   line=line_after_while)
 
     def assign(self, string):
-        a = self.semantic_stack[-1]
-        b = self.semantic_stack[-2]
+        a = self.find_symbol_address(self.semantic_stack[-1])
+        b = self.find_symbol_address(self.semantic_stack[-2])
         self.semantic_stack.pop()
 
         self.add_to_program_block(code=f"(ASSIGN, {a}, {b}, )")
@@ -497,7 +497,6 @@ class Subroutines:
 
         result_address = self.symbol_table.get_temp()
         self.add_to_program_block(code=f'(EQ, {case_address}, {switch_address}, {result_address})')
-        print(self.program_block_counter)
         self.semantic_stack.append(self.program_block_counter)
         self.add_to_program_block(code=f'(JPF, {result_address}, ?, )')
 
