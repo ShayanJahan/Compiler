@@ -95,7 +95,7 @@ class Subroutines:
 
             if self.function_signature[function_symbol.lexeme][i + 2] == 'array' and argument.var_type == 'int':
                 self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, i + 1, 'array', 'int')
+                    self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'array', 'int')
             elif self.function_signature[function_symbol.lexeme][i + 2] != 'array' and argument.var_type == 'int*':
                 self.semantic_checker.argument_type_error(
                     self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'int', 'array')
