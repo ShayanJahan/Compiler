@@ -15,9 +15,12 @@ class Subroutines:
         self.semantic_checker = semantic_checker
         self.scope_stack = [0]
         self.scope_counter = 1
-        self.function_signature = dict()
         self.function_memory = []
+        self.function_signature = dict()
+        #self.add_to_program_block(code=f"(ASSIGN, #500, {new_symbol_table.stack_pointer}, )") TODO
+        #self.add_to_program_block(code=f"(ASSIGN, #0, {new_symbol_table.return_value_address_pointer}, )")
 
+    #def find_symbol_address(self, ):
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -29,10 +32,25 @@ class Subroutines:
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
 
+    def call_function(self, function_symbol, arguments):
+        if function_symbol is None:
+            self.semantic_stack.append(None)
+            return
+        if len(arguments) != function_symbol.arguments_count:
+            #self.semantic_check(check_error='arguments_count', p1=function_symbol.lexeme) TODO error
+            self.semantic_stack.append(None)
+            return
+
+        if function_symbol.lexeme == 'output':
+            self.add_to_program_block(code=f"(PRINT, {self.find_symbol_address(args[0])}, , )")
+            self.semantic_stack.append('output function void')
+            return
+
+
+
     def close_function(self, string):
         #TODO
         pass
-
 
 
     def define_function(self, string):
