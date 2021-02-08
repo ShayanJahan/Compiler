@@ -1,11 +1,11 @@
 from SymbolTable import *
-from SemanticChecker import SemanticChecker
+from SemanticErrorHandler import SemanticErrorHandler
 
 
-class FunctionEntry:
-    def __init__(self, *, frame_size, name):
-        self.frame_size = frame_size
+class FunctionCall:
+    def __init__(self, *, mem_size, name):
         self.name = name
+        self.mem_size = mem_size
 
 
 class Subroutines:
@@ -39,12 +39,12 @@ class Subroutines:
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
 
-    def get_by_relative_address(self, relative_address):
+    def relative_access(self, relative_address):
         tmp = self.symbol_table.get_temp()
         self.add_to_program_block(code=f"(ADD, {self.symbol_table.st_pointer}, #{relative_address}, {tmp})")
         return "@" + str(tmp)
 
-    def at_at_to_at(self, pointer):
+    def reduce_at(self, pointer):
         tmp = self.symbol_table.get_temp()
         self.add_to_program_block(code=f"(ASSIGN, {pointer}, {tmp}, )")
         return '@' + str(tmp)
@@ -53,19 +53,14 @@ class Subroutines:
         if symbol is None:
             return None
 
-        # if symbol.type == 'function':
-        #    raise Exception('extracting address from function')
-
         if symbol.address_type == 'global':
             return symbol.address
 
         if symbol.address_type == 'relative':
-            return self.get_by_relative_address(symbol.address)
+            return self.relative_access(symbol.address)
 
         if symbol.address_type == 'relative pointer':
-            return self.at_at_to_at(self.get_by_relative_address(symbol.address))
-
-        # raise Exception("hendelll")
+            return self.reduce_at(self.relative_access(symbol.address))
 
     def call_function(self, function_symbol, arguments):
         if function_symbol is None:
@@ -83,13 +78,13 @@ class Subroutines:
 
         stack_pointer_new_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size}, {stack_pointer_new_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size}, {stack_pointer_new_address})")
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.st_pointer}, @{stack_pointer_new_address}, )")
 
         return_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 4}, {return_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size + 4}, {return_address})")
 
         i = 0
         while i < len(arguments):
@@ -106,7 +101,7 @@ class Subroutines:
             argument_address = self.symbol_table.get_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i // 3 * 4},"
+                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size + 8 + i // 3 * 4},"
                      f" {argument_address})")
 
             self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
@@ -120,9 +115,9 @@ class Subroutines:
 
         self.add_to_program_block(code=f"(JP, {function_symbol.address}, ,)")
 
-        relative_address = self.function_memory[-1].frame_size
-        function_result_address = self.get_by_relative_address(relative_address)
-        self.function_memory[-1].frame_size += 4
+        relative_address = self.function_memory[-1].mem_size
+        function_result_address = self.relative_access(relative_address)
+        self.function_memory[-1].mem_size += 4
 
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.return_address}, {function_result_address}, )")
@@ -169,7 +164,7 @@ class Subroutines:
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
 
-        self.function_memory.append(FunctionEntry(frame_size=8, name=function_name))
+        self.function_memory.append(FunctionCall(mem_size=8, name=function_name))
 
         self.function_signature[function_name] = arguments
 
@@ -178,16 +173,17 @@ class Subroutines:
             argument_type = arguments[i]
             argument_name = arguments[i + 1]
             is_array = arguments[i + 2] == 'array'
+            # print(is_array)
 
             type = argument_type
             if is_array:
                 type = type + '*'
 
             print(argument_name, type, is_array)
-            self.symbol_table.add_symbol(Symbol(argument_name, type, 'relative', self.function_memory[-1].frame_size,
+            self.symbol_table.add_symbol(Symbol(argument_name, type, 'relative', self.function_memory[-1].mem_size,
                                                 self.scope_stack[-1], 'variable'))
-
-            self.function_memory[-1].frame_size += 4
+            # print(self.function_memory[-1].mem_address)
+            self.function_memory[-1].mem_size += 4
 
             i += 3
 
@@ -265,9 +261,9 @@ class Subroutines:
             return
 
         if self.function_memory:
-            self.function_memory[-1].frame_size += 4
+            self.function_memory[-1].mem_size += 4
             symbol = Symbol(name=variable_name, variable_type=variable_type, address_type="relative",
-                            address=self.function_memory[-1].frame_size, scope=self.scope_stack[-1],
+                            address=self.function_memory[-1].mem_size, scope=self.scope_stack[-1],
                             symbol_type='variable')
             self.symbol_table.symbols.append(symbol)
         else:
@@ -287,14 +283,14 @@ class Subroutines:
             return
 
         if self.function_memory:
-            ptr_address = self.get_by_relative_address(self.function_memory[-1].frame_size)
-            self.function_memory[-1].frame_size += 4
-            address = self.get_by_relative_address(self.function_memory[-1].frame_size)
+            ptr_address = self.relative_access(self.function_memory[-1].mem_size)
+            self.function_memory[-1].mem_size += 4
+            address = self.relative_access(self.function_memory[-1].mem_size)
             self.add_to_program_block(code=f'(ASSIGN, {address[1:]}, {ptr_address}, )')
-            self.function_memory[-1].frame_size += 4 * int(array_len)
+            self.function_memory[-1].mem_size += 4 * int(array_len)
 
             symbol = Symbol(name=array_name, variable_type=f'{array_name}*', address_type='relative',
-                            address=self.function_memory[-1].frame_size, scope=self.scope_stack[-1],
+                            address=self.function_memory[-1].mem_size, scope=self.scope_stack[-1],
                             symbol_type='variable')
             self.symbol_table.symbols.append(symbol)
         else:
@@ -381,14 +377,14 @@ class Subroutines:
         a = self.find_symbol_address(a)
         i = self.find_symbol_address(i)
 
-        final_address = self.function_memory[-1].frame_size
-        temp_address = self.get_by_relative_address(final_address)
+        final_address = self.function_memory[-1].mem_size
+        temp_address = self.relative_access(final_address)
 
         symbol = Symbol(name="", variable_type='int', address_type='relative pointer',
-                        address=self.function_memory[-1].frame_size, scope=-1, symbol_type='variable')
+                        address=self.function_memory[-1].mem_size, scope=-1, symbol_type='variable')
         self.semantic_stack.append(symbol)
 
-        self.function_memory[-1].frame_size += 4
+        self.function_memory[-1].mem_size += 4
         self.add_to_program_block(code=f"(ADD, {a}, {i}, {temp_address})")
 
     def is_int(self, *args):
@@ -418,9 +414,9 @@ class Subroutines:
         A = self.find_symbol_address(A)
         B = self.find_symbol_address(B)
 
-        relative_address = self.function_memory[-1].frame_size
-        result = self.get_by_relative_address(self.function_memory[-1].frame_size)
-        self.function_memory[-1].frame_size += 4
+        relative_address = self.function_memory[-1].mem_size
+        result = self.relative_access(self.function_memory[-1].mem_size)
+        self.function_memory[-1].mem_size += 4
 
         self.add_to_program_block(code=f"({op}, {A}, {B}, {result})")
 
@@ -447,9 +443,9 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        relative_address = self.function_memory[-1].frame_size
-        result = self.get_by_relative_address(relative_address)
-        self.function_memory[-1].frame_size += 4
+        relative_address = self.function_memory[-1].mem_size
+        result = self.relative_access(relative_address)
+        self.function_memory[-1].mem_size += 4
 
         self.add_to_program_block(code=f"(MULT, {A}, {B}, {result})")
 
@@ -526,9 +522,9 @@ class Subroutines:
         self.is_int(A)
 
         A = self.find_symbol_address(A)
-        relative_address = self.function_memory[-1].frame_size
-        result = self.get_by_relative_address(relative_address)
-        self.function_memory[-1].frame_size += 4
+        relative_address = self.function_memory[-1].mem_size
+        result = self.relative_access(relative_address)
+        self.function_memory[-1].mem_size += 4
 
         self.add_to_program_block(code=f"(MULT, {A}, #-1, {result})")
 

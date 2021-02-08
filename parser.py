@@ -1,6 +1,6 @@
 import anytree
 from CodeGenerator import Subroutines
-from SemanticChecker import SemanticChecker
+from SemanticErrorHandler import SemanticErrorHandler
 
 EPSILON = 'ε'
 
@@ -21,7 +21,7 @@ class Parser:
         self.scanner = scanner
         self.errors = list()
         self.root = None
-        self.semantic_checker = SemanticChecker(self)
+        self.semantic_checker = SemanticErrorHandler(self)
         self.subroutines = Subroutines(self.semantic_checker)
 
     def open_grammar(self):
