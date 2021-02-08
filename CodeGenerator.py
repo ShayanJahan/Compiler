@@ -106,7 +106,7 @@ class Subroutines:
             argument_address = self.symbol_table.get_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i / 3 * 4},"
+                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i // 3 * 4},"
                      f" {argument_address})")
 
             self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
