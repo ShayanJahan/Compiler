@@ -103,9 +103,17 @@ class Subroutines:
         )
 
     def close_function(self, string):
-        #TODO
-        pass
+        return_address = self.symbol_table.get_simple_temp()
+        self.add_to_program_block(
+            code=f"(ADD, {self.symbol_table.stack_pointer}, #4, {return_address})")
 
+        self.add_to_program_block(
+            code=f"(ASSIGN, @{self.symbol_table.stack_pointer}, {self.symbol_table.stack_pointer}, )")
+
+        at_at_address = self.symbol_table.get_simple_temp()
+
+        self.add_to_program_block(code=f"(ASSIGN, @{return_address}, {at_at_address}, )")
+        self.add_to_program_block(code=f"(JP, @{at_at_address}, ,)")
 
     def define_function(self, string):
         arguments = []
