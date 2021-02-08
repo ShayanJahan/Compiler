@@ -18,10 +18,14 @@ class Subroutines:
         self.scope_counter = 1
         self.function_memory = []
         self.function_signature = dict()
-        #self.add_to_program_block(code=f"(ASSIGN, #500, {new_symbol_table.stack_pointer}, )") TODO
-        #self.add_to_program_block(code=f"(ASSIGN, #0, {new_symbol_table.return_value_address_pointer}, )")
 
-    #def find_symbol_address(self, ):
+        self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.stack_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_value_address_pointer}, )")
+
+        self.symbol_table.define_symbol(
+            Symbol(lexeme='output', var_type='void', addressing_type="nothing",
+                   address=0, symbol_type='function', scope=0,
+                   arguments_count=1))
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -159,12 +163,14 @@ class Subroutines:
             self.add_to_program_block(code="(JP, ?, , )")
             self.semantic_stack.append(self.program_block_counter - 1)
 
-        #self.symbol_table.define_symbol(...) TODO
+        self.symbol_table.define_symbol(Symbol(lexeme=function_name, var_type=function_type, addressing_type="code_line",
+                   address=program_block_counter, symbol_type='function', scope=scope_stack[-1],
+                   arguments_count=args_count))
 
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
 
-        #self.function_memory.append(...) TODO
+        self.function_memory.append(FunctionEntry(frame_size=8, lexeme=function_name))
 
         self.function_signature[function_name] = arguments
 
@@ -178,9 +184,11 @@ class Subroutines:
             if is_array:
                 symbol_type = symbol_type + '*'
 
-            #self.symbol_table.define_symbol(...) TODO
+            self.symbol_table.define_symbol(Symbol(lexeme=input_lexeme, var_type=var_type, addressing_type='relative',
+                       address=function_memory[-1].frame_size,
+                       scope=scope_stack[-1], symbol_type='variable'))
 
-            #self.function_memory[-1].frame_size TODO
+            self.function_memory[-1].frame_size += 4
 
             i += 3
 
@@ -191,22 +199,22 @@ class Subroutines:
         self.semantic_stack.append("function_call_start")
 
     def function_return(self, string):
-        #close_function() TODO
+        self.close_function()
 
     def function_return_with_value(self, string):
-        #function_result = find_symbol_address(self.semantic_stack.pop()) TODO
-        #self.add_to_program_block(code=f"(ASSIGN, {function_result}, {new_symbol_table.return_value_address_pointer}, )")
-        #close_function()
+        function_result = self.find_symbol_address(self.semantic_stack.pop())
+        self.add_to_program_block(code=f"(ASSIGN, {function_result}, {self.symbol_table.return_value_address_pointer}, )")
+        self.close_function()
 
     def end_of_scope(self, string):
-        #self.symbol_table.remove_scope(scope_number=self.scope_stack.pop()) TODO
+        self.symbol_table.remove_scope(scope_number=self.scope_stack.pop())
 
     def end_of_function(self, string):
-        #function_values = self.function_memory.pop() TODO
-        #if function_values.lexeme != 'main':
-            #close function()
-            #function_jump_line_in_PB = self.semantic_stack.pop()
-            #update_program_block(line=function_jump_line_in_PB, str(program_block_counter))   SOON TODO
+        function_values = self.function_memory.pop()
+        if function_values.lexeme != 'main':
+            self.close_function()
+            function_jump_line_in_PB = self.semantic_stack.pop()
+            self.update_program_block(line=function_jump_line_in_PB, str(self.program_block_counter))
 
     def function_call(self, string):
         arguments = []
@@ -218,7 +226,7 @@ class Subroutines:
         self.semantic_stack.pop()
         function_symbol = self.semantic_stack.pop()
 
-        #call_function(function_symbol, argument) TODO
+        self.call_function(function_symbol, argument)
 
 
     def push_number(self, string):
