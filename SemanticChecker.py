@@ -1,6 +1,3 @@
-import scanner
-
-
 class SemanticChecker:
     def __init__(self, parser):
         self.parser = parser.scanner
