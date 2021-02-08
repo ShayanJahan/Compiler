@@ -69,6 +69,21 @@ class Subroutines:
 
             i += 3
 
+    def function_return (self, string):
+        #close_function() TODO
+
+    def function_return_with_value (self, string):
+        #function_result = find_symbol_address(self.semantic_stack.pop()) TODO
+        #self.add_to_program_block(code=f"(ASSIGN, {function_result}, {new_symbol_table.return_value_address_pointer}, )")
+        #close_function()
+
+    def end_of_scope (self, string):
+        #self.symbol_table.remove_scope(scope_number=self.scope_stack.pop()) TODO
+
+    def end_of_function (self, string):
+        #function_values = self.function
+
+
     def push_number(self, string):
         temp = self.symbol_table.get_temp()
         value = int(string)
