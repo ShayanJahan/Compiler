@@ -19,8 +19,8 @@ class Subroutines:
         self.function_memory = []
         self.function_signature = dict()
 
-        self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.stack_pointer}, )")
-        self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_value_address_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
         self.symbol_table.define_symbol(
             Symbol(lexeme='output', var_type='void', addressing_type="nothing",
@@ -38,12 +38,12 @@ class Subroutines:
         self.program_block[line] = self.program_block[line].replace('?', str)
 
     def get_by_relative_address(self, relative_address):
-        tmp = self.symbol_table.get_simple_temp()
-        self.add_to_program_block(code=f"(ADD, {self.symbol_table.stack_pointer}, #{relative_address}, {tmp})")
+        tmp = self.symbol_table.get_temp()
+        self.add_to_program_block(code=f"(ADD, {self.symbol_table.st_pointer}, #{relative_address}, {tmp})")
         return "@" + str(tmp)
 
     def at_at_to_at(self, pointer):
-        tmp = self.symbol_table.get_simple_temp()
+        tmp = self.symbol_table.get_temp()
         self.add_to_program_block(code=f"(ASSIGN, {pointer}, {tmp}, )")
         return '@' + str(tmp)
 
@@ -66,8 +66,6 @@ class Subroutines:
         #raise Exception("hendelll")
 
 
-
-
     def call_function(self, function_symbol, arguments):
         if function_symbol is None:
             self.semantic_stack.append(None)
@@ -82,15 +80,15 @@ class Subroutines:
             self.semantic_stack.append('output function void')
             return
 
-        stack_pointer_new_address = self.symbol_table.get_simple_temp()
+        stack_pointer_new_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size}, {stack_pointer_new_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size}, {stack_pointer_new_address})")
         self.add_to_program_block(
-            code=f"(ASSIGN, {self.symbol_table.stack_pointer}, @{stack_pointer_new_address}, )")
+            code=f"(ASSIGN, {self.symbol_table.st_pointer}, @{stack_pointer_new_address}, )")
 
-        return_address = self.symbol_table.get_simple_temp()
+        return_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size + 4}, {return_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 4}, {return_address})")
 
         i = 0
         while i < len(arguments):
@@ -103,10 +101,10 @@ class Subroutines:
                 self.semantic_checker.argument_type_error(
                     self.function_signature[function_symbol.lexeme][i], function_symbol.lexeme, 'int', 'array')
 
-            argument_address = self.symbol_table.get_simple_temp()
+            argument_address = self.symbol_table.get_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {self.symbol_table.stack_pointer}, #{self.function_memory[-1].frame_size + 8 + i * 4},"
+                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].frame_size + 8 + i * 4},"
                      f" {argument_address})")
 
             self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
@@ -114,7 +112,7 @@ class Subroutines:
             i += 3
 
         self.add_to_program_block(
-            code=f"(ASSIGN, {stack_pointer_new_address}, {self.symbol_table.stack_pointer}, )")
+            code=f"(ASSIGN, {stack_pointer_new_address}, {self.symbol_table.st_pointer}, )")
 
         self.add_to_program_block(code=f"(ASSIGN, #{self.program_block_counter + 2}, @{return_address}, )")
 
@@ -125,7 +123,7 @@ class Subroutines:
         self.function_memory[-1].frame_size += 4
 
         self.add_to_program_block(
-            code=f"(ASSIGN, {self.symbol_table.return_value_address_pointer}, {function_result_address}, )")
+            code=f"(ASSIGN, {self.symbol_table.return_address}, {function_result_address}, )")
 
         self.semantic_stack.append(
             Symbol(lexeme="", var_type=function_symbol.var_type, addressing_type='relative', address=relative_address,
@@ -133,14 +131,14 @@ class Subroutines:
         )
 
     def close_function(self, string):
-        return_address = self.symbol_table.get_simple_temp()
+        return_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.stack_pointer}, #4, {return_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, #4, {return_address})")
 
         self.add_to_program_block(
-            code=f"(ASSIGN, @{self.symbol_table.stack_pointer}, {self.symbol_table.stack_pointer}, )")
+            code=f"(ASSIGN, @{self.symbol_table.st_pointer}, {self.symbol_table.st_pointer}, )")
 
-        at_at_address = self.symbol_table.get_simple_temp()
+        at_at_address = self.symbol_table.get_temp()
 
         self.add_to_program_block(code=f"(ASSIGN, @{return_address}, {at_at_address}, )")
         self.add_to_program_block(code=f"(JP, @{at_at_address}, ,)")
@@ -203,7 +201,7 @@ class Subroutines:
 
     def function_return_with_value(self, string):
         function_result = self.find_symbol_address(self.semantic_stack.pop())
-        self.add_to_program_block(code=f"(ASSIGN, {function_result}, {self.symbol_table.return_value_address_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, {function_result}, {self.symbol_table.return_address}, )")
         self.close_function()
 
     def end_of_scope(self, string):
