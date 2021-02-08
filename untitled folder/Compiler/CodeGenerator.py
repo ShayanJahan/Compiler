@@ -2,17 +2,12 @@ from SymbolTable import SymbolTable
 
 
 class Subroutines:
-    def __init__(self, semantic_checker):
+    def __init__(self):
         self.semantic_stack = []
         self.stack = list()
         self.symbol_table = SymbolTable()
         self.program_block = list()
         self.program_block_counter = 0
-        self.semantic_checker = semantic_checker
-        self.scope_stack = []
-        self.scope_counter = 0
-        self.function_signature = dict()
-
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -20,87 +15,6 @@ class Subroutines:
             self.program_block_counter += 1
         else:
             self.program_block[line] = code
-
-
-    def define_function(self, string):
-        arguments = []
-
-        while self.semantic_stack[-1] != 'function_start':
-            arguments.append(self.semantic_stack.pop())
-
-        arguments.reverse()
-        arguments_number = len(arguments) // 3
-
-        self.semantic_stack.pop()
-
-        function_name = self.semantic_stack.pop()
-        function_type = self.semantic_stack.pop()
-
-        if function_name != 'main':
-            self.add_to_program_block(code="(JP, ?, , )")
-            self.semantic_stack.append(self.program_block_counter - 1)
-
-        #self.symbol_table.define_symbol() TODO
-
-        self.scope_counter += 1
-        self.scope_stack.append(self.scope_counter)
-
-        #self.function_memory.append(...) TODO
-
-        self.function_signature[function_name] = arguments
-
-        i = 0
-        while i < len(arguments):
-            argument_type = arguments[i]
-            argument_lexeme = arguments[i + 1]
-            is_array = arguments[i + 2]
-
-            symbol_type = argument_type
-            if is_array:
-                symbol_type = symbol_type + '*'
-
-            #self.symbol_table.define_symbol() TODO
-
-            #self.function_memory[-1].frame_size TODO
-
-            i += 3
-
-    def function_start(self, string):
-        self.semantic_stack.append("function_start")
-
-    def function_call_start(self, string):
-        self.semantic_stack.append("function_call_start")
-
-    def function_return(self, string):
-        #close_function() TODO
-
-    def function_return_with_value(self, string):
-        #function_result = find_symbol_address(self.semantic_stack.pop()) TODO
-        #self.add_to_program_block(code=f"(ASSIGN, {function_result}, {new_symbol_table.return_value_address_pointer}, )")
-        #close_function()
-
-    def end_of_scope(self, string):
-        #self.symbol_table.remove_scope(scope_number=self.scope_stack.pop()) TODO
-
-    def end_of_function(self, string):
-        #function_values = self.function_memory.pop() TODO
-        #if function_values.lexeme != 'main':
-            #close function()
-            #function_jump_line_in_PB = self.semantic_stack.pop()
-            #edit_program_line(line=function_jump_line_in_PB, replacement=str(program_block_counter))   SOON TODO
-
-    def function_call(self, string):
-        arguments = []
-        while self.semantic_stack[-1] != 'function_call_start':
-            arguments.append(self.semantic_stack.pop())
-
-        arguments.reverse()
-
-        self.semantic_stack.pop()
-        function_symbol = self.semantic_stack.pop()
-
-        #call_function(function_symbol, argument) TODO
-
 
     def push_number(self, string):
         temp = self.symbol_table.get_temp()
@@ -234,11 +148,7 @@ class Subroutines:
 
     def write_output(self, file_name):
         with open(file_name, 'w') as f:
-            if self.semantic_checker.errors:
-                f.write('The code has not been generated.\n')
-                return
             st_counter = 0
             for s in self.program_block:
                 f.write(str(st_counter) + '\t' + s + '\n')
                 st_counter += 1
-
