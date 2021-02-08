@@ -23,20 +23,18 @@ class Subroutines:
 
 
     def define_function(self, string):
-        function_list = []
+        arguments = []
 
         while self.semantic_stack[-1] != 'function_start':
-            function_list.append(self.semantic_stack.pop())
+            arguments.append(self.semantic_stack.pop())
+
+        arguments.reverse()
+        arguments_number = len(arguments) // 3
 
         self.semantic_stack.pop()
 
-        function_list.append(self.semantic_stack.pop())
-        function_list.append(self.semantic_stack.pop())
-
-        function_list.reverse()
-
-        function_type = function_list[0]
-        function_name = function_list[1]
+        function_name = self.semantic_stack.pop()
+        function_type = self.semantic_stack.pop()
 
         if function_name != 'main':
             self.add_to_program_block(code="(JP, ?, , )")
@@ -49,8 +47,6 @@ class Subroutines:
 
         #self.function_memory.append(...) TODO
 
-        arguments_number = len(function_list) - 2
-        arguments = function_list[2:]
         self.function_signature[function_name] = arguments
 
         i = 0
@@ -69,19 +65,41 @@ class Subroutines:
 
             i += 3
 
-    def function_return (self, string):
+    def function_start(self, string):
+        self.semantic_stack.append("function_start")
+
+    def function_call_start(self, string):
+        self.semantic_stack.append("function_call_start")
+
+    def function_return(self, string):
         #close_function() TODO
 
-    def function_return_with_value (self, string):
+    def function_return_with_value(self, string):
         #function_result = find_symbol_address(self.semantic_stack.pop()) TODO
         #self.add_to_program_block(code=f"(ASSIGN, {function_result}, {new_symbol_table.return_value_address_pointer}, )")
         #close_function()
 
-    def end_of_scope (self, string):
+    def end_of_scope(self, string):
         #self.symbol_table.remove_scope(scope_number=self.scope_stack.pop()) TODO
 
-    def end_of_function (self, string):
-        #function_values = self.function
+    def end_of_function(self, string):
+        #function_values = self.function_memory.pop() TODO
+        #if function_values.lexeme != 'main':
+            #close function()
+            #function_jump_line_in_PB = self.semantic_stack.pop()
+            #edit_program_line(line=function_jump_line_in_PB, replacement=str(program_block_counter))   SOON TODO
+
+    def function_call(self, string):
+        arguments = []
+        while self.semantic_stack[-1] != 'function_call_start':
+            arguments.append(self.semantic_stack.pop())
+
+        arguments.reverse()
+
+        self.semantic_stack.pop()
+        function_symbol = self.semantic_stack.pop()
+
+        #call_function(function_symbol, argument) TODO
 
 
     def push_number(self, string):
