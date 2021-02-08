@@ -1,13 +1,7 @@
 /*===== Sample 1 =====*/
 int foo(int x){
-	if (x < 0){
-		output(x);
-		return 1;
-	}
-	else {
-		output(x);
-		return x + -2;
-	}
+	output(x);
+	return 1;
 }
 void main(void){
 	int i;	

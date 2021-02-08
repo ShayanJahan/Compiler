@@ -206,7 +206,7 @@ class Subroutines:
 
     def end_of_function(self, string):
         function_values = self.function_memory.pop()
-        if function_values.name != 'main':
+        if function_values.lexeme != 'main':
             self.close_function()
             function_jump_line_in_program_block = self.semantic_stack.pop()
             self.update_program_block(function_jump_line_in_program_block, str(self.program_block_counter))
