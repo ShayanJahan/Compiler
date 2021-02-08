@@ -31,10 +31,10 @@ class Subroutines:
         if line is None:
             self.program_block.append(code)
             self.program_block_counter += 1
-            print(self.program_block[-1])
+            # print(self.program_block[-1])
         else:
             self.program_block[line] = code
-            print(self.program_block[line])
+            # print(self.program_block[line])
 
     def update_program_block(self, line, str):
         self.program_block[line] = self.program_block[line].replace('?', str)
@@ -312,6 +312,7 @@ class Subroutines:
         self.add_to_program_block(code=None)
 
     def start_if(self, string):
+        print('%', self.semantic_stack[-1])
         result_address = self.find_symbol_address(self.semantic_stack[-1])
         self.semantic_stack.pop()
         self.add_to_program_block(f'(JPF, {result_address}, ?, )')
@@ -410,8 +411,7 @@ class Subroutines:
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        if self.is_int(A, B):
-            return
+        self.is_int(A, B)
 
         relative_address = self.function_memory[-1].frame_size
         result = self.get_by_relative_address(self.function_memory[-1].frame_size)
@@ -517,8 +517,7 @@ class Subroutines:
         A = self.semantic_stack[-1]
         self.semantic_stack.pop()
 
-        if self.is_int(A):
-            return
+        self.is_int(A)
 
         A = self.find_symbol_address(A)
         relative_address = self.function_memory[-1].frame_size
