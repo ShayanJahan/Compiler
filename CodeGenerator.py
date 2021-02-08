@@ -35,8 +35,34 @@ class Subroutines:
 
     def get_by_relative_address(self, relative_address):
         tmp = self.symbol_table.get_simple_temp()
-        self.add_to_program_block(code=f"(ADD, {new_symbol_table.stack_pointer}, #{relative_address}, {tmp})")
+        self.add_to_program_block(code=f"(ADD, {self.symbol_table.stack_pointer}, #{relative_address}, {tmp})")
         return "@" + str(tmp)
+
+    def at_at_to_at(self, pointer):
+        tmp = self.symbol_table.get_simple_temp()
+        self.add_to_program_block(code=f"(ASSIGN, {pointer}, {tmp}, )")
+        return '@' + str(tmp)
+
+    def find_symbol_address(self, symbol):
+        if symbol is None:
+            return None
+
+        #if symbol.type == 'function':
+        #    raise Exception('extracting address from function')
+
+        if symbol.addressing_type == 'global':
+            return symbol.address
+
+        if symbol.addressing_type == 'relative':
+            return self.get_by_relative_address(symbol.address)
+
+        if symbol.addressing_type == 'relative pointer':
+            return self.at_at_to_at(self.get_by_relative_address(symbol.address))
+
+        #raise Exception("hendelll")
+
+
+
 
     def call_function(self, function_symbol, arguments):
         if function_symbol is None:
