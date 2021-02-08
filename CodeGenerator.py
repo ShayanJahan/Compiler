@@ -227,7 +227,7 @@ class Subroutines:
     def push_number(self, string):
         temp = self.symbol_table.get_temp()
         value = int(string)
-        self.add_to_program_block(f"(ASSIGN, #{value}, {temp}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #{value}, {temp}, )")
         symbol = Symbol(name="", variable_type='int', address_type='global', address=temp, scope=-1,
                         symbol_type='variable')
         self.semantic_stack.append(symbol)
@@ -460,7 +460,7 @@ class Subroutines:
     def while_condition(self, string):
         result = self.find_symbol_address(self.semantic_stack[-1])
         self.semantic_stack.pop()
-        self.add_to_program_block(f'(JPF, {result}, ?, )')
+        self.add_to_program_block(code=f'(JPF, {result}, ?, )')
         self.semantic_stack.append(self.program_block_counter - 1)
 
     def end_while(self, string):
@@ -469,7 +469,7 @@ class Subroutines:
         outer_line = self.semantic_stack[-3]
 
         self.semantic_stack = self.semantic_stack[:-3]
-        self.add_to_program_block(f'(JP, {beginning_line}, , )')
+        self.add_to_program_block(code=f'(JP, {beginning_line}, , )')
         self.program_block[condition_line].replace('?', str(self.program_block_counter))
         self.program_block[outer_line].replace('?', str(self.program_block_counter))
 
@@ -477,9 +477,9 @@ class Subroutines:
 
     def start_switch(self, string):
         self.code_scope_stack.append(("switch", len(self.semantic_stack)))
-        self.add_to_program_block(f'(JP, {self.program_block_counter + 2}, , )')
+        self.add_to_program_block(code=f'(JP, {self.program_block_counter + 2}, , )')
         self.semantic_stack.append(self.program_block_counter)
-        self.add_to_program_block(f'(JP, ?, , )')
+        self.add_to_program_block(code=f'(JP, ?, , )')
 
     def end_switch(self, string):
         outer_line = self.semantic_stack[-2]
