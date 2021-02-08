@@ -3,9 +3,9 @@ from SemanticChecker import SemanticChecker
 
 
 class FunctionEntry:
-    def __init__(self, *, frame_size, lexeme):
+    def __init__(self, *, frame_size, name):
         self.frame_size = frame_size
-        self.lexeme = lexeme
+        self.name = name
 
 
 class Subroutines:
@@ -166,7 +166,7 @@ class Subroutines:
         self.scope_counter += 1
         self.scope_stack.append(self.scope_counter)
 
-        self.function_memory.append(FunctionEntry(frame_size=8, lexeme=function_name))
+        self.function_memory.append(FunctionEntry(8, function_name))
 
         self.function_signature[function_name] = arguments
 
@@ -206,7 +206,7 @@ class Subroutines:
 
     def end_of_function(self, string):
         function_values = self.function_memory.pop()
-        if function_values.lexeme != 'main':
+        if function_values.name != 'main':
             self.close_function()
             function_jump_line_in_program_block = self.semantic_stack.pop()
             self.update_program_block(function_jump_line_in_program_block, str(self.program_block_counter))
