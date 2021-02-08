@@ -125,7 +125,8 @@ class Subroutines:
         self.add_to_program_block(
             code=f"(ASSIGN, {self.symbol_table.return_address}, {function_result_address}, )")
 
-        self.semantic_stack.append(Symbol("", function_symbol.variable_type, 'relative', relative_address, -1, 'variable'))
+        self.semantic_stack.append(
+            Symbol("", function_symbol.variable_type, 'relative', relative_address, -1, 'variable'))
 
     def close_function(self):
         return_address = self.symbol_table.get_temp()
@@ -158,8 +159,8 @@ class Subroutines:
             self.add_to_program_block(code="(JP, ?, , )")
             self.semantic_stack.append(self.program_block_counter - 1)
 
-        #print(self.scope_counter)
-        #print(len(self.scope_stack))
+        # print(self.scope_counter)
+        # print(len(self.scope_stack))
         self.symbol_table.add_symbol(Symbol(function_name, function_type, "code_line", self.program_block_counter,
                                             'function', self.scope_stack[-1], arguments_number))
 
@@ -308,6 +309,24 @@ class Subroutines:
         self.semantic_stack.append(self.program_block_counter)
         self.add_to_program_block(code=None)
 
+    def start_if(self, string):
+        result_address = self.find_symbol_address(self.semantic_stack[-1])
+        self.semantic_stack.pop()
+        self.add_to_program_block(f'(JPF, {result_address}, ?, )')
+        self.semantic_stack.append(self.program_block_counter - 1)
+
+    def start_else(self, string):
+        self.add_to_program_block(f'(JP, ?, , )')
+        if_line = self.semantic_stack[-1]
+        self.semantic_stack.pop()
+        self.semantic_stack.append(self.program_block_counter - 1)
+        self.program_block[if_line].replace('?', str(self.program_block_counter))
+
+    def end_if(self, string):
+        else_line = self.semantic_stack[-1]
+        self.semantic_stack.pop()
+        self.program_block[else_line].replace('?', str(self.program_block_counter))
+
     def false_condition_jump(self, string):
         compare_result = self.semantic_stack[-2]
         jump_line = self.semantic_stack[-1]
@@ -415,17 +434,21 @@ class Subroutines:
         self.semantic_stack.append('SUB')
 
     def mult_values(self, string):
-        A = self.semantic_stack[-2]
-        B = self.semantic_stack[-1]
+        A = self.find_symbol_address(self.semantic_stack[-2])
+        B = self.find_symbol_address(self.semantic_stack[-1])
 
         self.semantic_stack.pop()
         self.semantic_stack.pop()
 
-        result = self.symbol_table.get_temp()
+        relative_address = self.function_memory[-1].frame_size
+        result = self.get_by_relative_address(relative_address)
+        self.function_memory[-1].frame_size += 4
 
         self.add_to_program_block(code=f"(MULT, {A}, {B}, {result})")
 
-        self.semantic_stack.append(result)
+        symbol = Symbol(name="", variable_type='int', address_type='relative', address=relative_address, scope=-1,
+                        symbol_type='variable')
+        self.semantic_stack.append(symbol)
 
     def start_while(self, string):
         self.code_scope_stack.append(('while', len(self.semantic_stack)))

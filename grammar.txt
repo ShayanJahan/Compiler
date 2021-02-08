@@ -31,7 +31,7 @@ Statement -> Switch-stmt
 Expression-stmt -> Expression #pop_number ;
 Expression-stmt -> break #break_command ;
 Expression-stmt -> ;
-Selection-stmt -> if ( Expression #save_address ) Statement #false_condition_jump else Statement #jump
+Selection-stmt -> if ( Expression #start_if ) Statement else #start_else Statement #end_if
 Iteration-stmt -> while ( #start_while Expression ) #while_condition Statement #end_while
 Return-stmt -> return Return-stmt-prime
 Return-stmt-prime -> #function_return ;
