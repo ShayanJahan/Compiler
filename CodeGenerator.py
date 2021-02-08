@@ -13,7 +13,7 @@ class Subroutines:
         self.symbol_table = SymbolTable()
         self.program_block = list()
         self.program_block_counter = 0
-        self.semantic_checker = SemanticChecker()
+        self.semantic_checker = semantic_checker
         self.scope_stack = [0]
         self.scope_counter = 1
         self.function_memory = []
