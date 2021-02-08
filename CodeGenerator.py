@@ -23,7 +23,7 @@ class Subroutines:
         self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
-        self.symbol_table.add_symbol(Symbol('output', 'void', "none", 0, 'function', 0, 1))
+        self.symbol_table.add_symbol(Symbol('output', 'void', 'none', 0, 'function', 0, 1))
 
     def add_to_program_block(self, code, line=None):
         if line is None:
@@ -217,7 +217,7 @@ class Subroutines:
         self.semantic_stack.pop()
         function_symbol = self.semantic_stack.pop()
 
-        self.call_function(function_symbol, argument)
+        self.call_function(function_symbol, arguments)
 
 
     def push_number(self, string):
