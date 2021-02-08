@@ -21,7 +21,7 @@ class SemanticChecker:
 
     def type_operation_error(self, type1, type2):
         self.errors.append(f'#{self.parser.scanner.tk_counter} : Semantic Error! ' +
-                           f"Type mismatch in operands, Got {type1} instead of {type2}.\n")
+                           f"Type mismatch in operands, Got {type1} instead of {type2}.")
 
     def argument_type_error(self, variable_name, function_name, type1, type2):
         self.errors.append(f'#{self.parser.scanner.tk_counter} : Semantic Error! ' +

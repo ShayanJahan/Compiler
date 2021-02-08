@@ -177,12 +177,13 @@ class Subroutines:
         while i < len(arguments):
             argument_type = arguments[i]
             argument_name = arguments[i + 1]
-            is_array = arguments[i + 2]
+            is_array = arguments[i + 2] == 'array'
 
             type = argument_type
             if is_array:
                 type = type + '*'
 
+            print(argument_name, type, is_array)
             self.symbol_table.add_symbol(Symbol(argument_name, type, 'relative', self.function_memory[-1].frame_size,
                                                 self.scope_stack[-1], 'variable'))
 
@@ -392,6 +393,7 @@ class Subroutines:
     def is_int(self, *args):
         flag = False
         for symbol in args:
+            print('$$$$$$$', symbol.name, symbol.variable_type)
             if symbol is None:
                 continue
             if symbol.variable_type == 'int*':
@@ -412,6 +414,9 @@ class Subroutines:
         self.semantic_stack.pop()
 
         self.is_int(A, B)
+
+        A = self.find_symbol_address(A)
+        B = self.find_symbol_address(B)
 
         relative_address = self.function_memory[-1].frame_size
         result = self.get_by_relative_address(self.function_memory[-1].frame_size)
