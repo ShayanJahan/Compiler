@@ -38,8 +38,8 @@ class SymbolTable:
         return self.start_data - self.byte_length
 
     def make_space(self, value):
-        self.start_data += value * self.byte_length
-        return self.start_data - value * self.byte_length
+        self.start_data += int(value) * self.byte_length
+        return self.start_data - int(value) * self.byte_length
 
     def add_symbol(self, symbol):
         self.symbols.append(symbol)
