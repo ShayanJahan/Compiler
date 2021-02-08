@@ -353,7 +353,22 @@ class Subroutines:
         self.semantic_stack.append(self.program_block_counter)
 
     def while_condition(self, string):
-        pass
+        result = self.find_symbol_address(self.semantic_stack[-1])
+        self.semantic_stack.pop()
+        self.add_to_program_block(f'(JPF, {result}, ?, )')
+        self.semantic_stack.append(self.program_block_counter - 1)
+
+    def end_while(self, string):
+        condition_line = self.semantic_stack[-1]
+        beginning_line = self.semantic_stack[-2]
+        outer_line = self.semantic_stack[-3]
+
+        self.semantic_stack = self.semantic_stack[:-3]
+        self.add_to_program_block(f'(JP, {beginning_line}, , )')
+        self.program_block[condition_line].replace('?', str(self.program_block_counter))
+        self.program_block[outer_line].replace('?', str(self.program_block_counter))
+
+        self.scope_stack.pop()
 
     def change_sign(self, string):
         A = self.semantic_stack[-1]
