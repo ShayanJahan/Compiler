@@ -1,21 +1,49 @@
+class Symbol:
+    def __init__(self, name, variable_type, address_type, address, scope, symbol_type, arguments_count=0):
+        self.name = name
+        self.var_type = variable_type
+        self.address_type = address_type
+        self.address = address
+        self.scope = scope
+        self.symbol_type = symbol_type
+        self.arguments_count = arguments_count
+
+
 class SymbolTable:
     def __init__(self):
         self.symbols = list()
-        self.start_data = 500
-        self.start_temp = 1000
+        self.st_pointer = 100
+        self.start_temp = 2000
+        self.start_data = 5000
         self.byte_length = 4
+        self.return_address = 10
+
+        self.symbols.append(Symbol(
+            name='output', symbol_type='function', variable_type='void', address_type=None, address=-1, scope=-1)
+        )
 
     def find_address(self, symbol_name):
         for symbol in self.symbols:
-            if symbol[0] == symbol_name:
+            if symbol.name == symbol_name:
                 return symbol
-        self.symbols.append((symbol_name, self.start_data))
-        self.start_data += self.byte_length
-        return self.symbols[-1]
+        return None
 
     def get_temp(self):
         self.start_temp += self.byte_length
         return self.start_temp - self.byte_length
 
+    def delete_scope(self, scope):
+        for symbol in self.symbols:
+            if symbol.scope == scope:
+                self.symbols.remove(symbol)
+
+    def get_global(self):
+        self.start_data += self.byte_length
+        return self.start_data - self.byte_length
+
     def make_space(self, value):
         self.start_data += value * self.byte_length
+        return self.start_data - value * self.byte_length
+
+    def add_symbol(self, symbol):
+        self.symbols.append(symbol)
