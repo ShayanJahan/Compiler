@@ -18,10 +18,6 @@ class SymbolTable:
         self.byte_length = 4
         self.return_address = 10
 
-        self.symbols.append(Symbol(
-            name='output', symbol_type='function', variable_type='void', address_type=None, address=-1, scope=-1)
-        )
-
     def find_address(self, symbol_name):
         for symbol in self.symbols:
             if symbol.name == symbol_name:
