@@ -22,7 +22,7 @@ class Subroutines:
         self.function_signature = dict()
         self.code_scope_stack = list()
 
-        self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #2000, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
         self.symbol_table.add_symbol(Symbol('output', 'void', 'nothing', 0, 'function', 0, 1))
@@ -84,29 +84,29 @@ class Subroutines:
 
         return_address = self.symbol_table.get_temp()
         self.add_to_program_block(
-            code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size + 4}, {return_address})")
+            code=f"(ADD, {self.symbol_table.st_pointer}, {self.function_memory[-1].mem_size + 4}, {return_address})")
 
         i = 0
         while i < len(arguments):
             argument = arguments[i]
 
-            if self.function_signature[function_symbol.name][i + 2] != 'array' and argument.variable_type == 'int*':
+            if self.function_signature[function_symbol.name][3 * i + 2] != 'array' and argument.variable_type == 'int*':
                 self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.name][i], function_symbol.name, 'int', 'array')
+                    self.function_signature[function_symbol.name][3 * i], function_symbol.name, 'int', 'array')
 
-            if self.function_signature[function_symbol.name][i + 2] == 'array' and argument.variable_type == 'int':
+            if self.function_signature[function_symbol.name][3 * i + 2] == 'array' and argument.variable_type == 'int':
                 self.semantic_checker.argument_type_error(
-                    self.function_signature[function_symbol.name][i], function_symbol.name, 'array', 'int')
+                    self.function_signature[function_symbol.name][3 * i], function_symbol.name, 'array', 'int')
 
             argument_address = self.symbol_table.get_temp()
 
             self.add_to_program_block(
-                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size + 8 + i // 3 * 4},"
+                code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size + 8 + i  * 4},"
                      f" {argument_address})")
 
             self.add_to_program_block(code=f"(ASSIGN, {self.find_symbol_address(argument)}, @{argument_address}, )")
 
-            i += 3
+            i += 1
 
         self.add_to_program_block(
             code=f"(ASSIGN, {stack_pointer_new_address}, {self.symbol_table.st_pointer}, )")
