@@ -22,7 +22,7 @@ class Subroutines:
         self.function_signature = dict()
         self.code_scope_stack = list()
 
-        self.add_to_program_block(code=f"(ASSIGN, #500, {self.symbol_table.st_pointer}, )")
+        self.add_to_program_block(code=f"(ASSIGN, #2000, {self.symbol_table.st_pointer}, )")
         self.add_to_program_block(code=f"(ASSIGN, #0, {self.symbol_table.return_address}, )")
 
         self.symbol_table.add_symbol(Symbol('output', 'void', 'nothing', 0, 'function', 0, 1))
@@ -172,6 +172,8 @@ class Subroutines:
             return
 
         stack_pointer_new_address = self.symbol_table.get_temp()
+        print(f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size}, {stack_pointer_new_address})")
+
         self.add_to_program_block(
             code=f"(ADD, {self.symbol_table.st_pointer}, #{self.function_memory[-1].mem_size}, {stack_pointer_new_address})")
         self.add_to_program_block(
@@ -258,10 +260,10 @@ class Subroutines:
             return
 
         if self.function_memory:
-            self.function_memory[-1].mem_size += 4
             symbol = Symbol(name=variable_name, variable_type=variable_type, address_type="relative",
                             address=self.function_memory[-1].mem_size, scope=self.scope_stack[-1],
                             symbol_type='variable')
+            self.function_memory[-1].mem_size += 4
             self.symbol_table.symbols.append(symbol)
         else:
             symbol = Symbol(name=variable_name, variable_type=variable_type, address_type="global",

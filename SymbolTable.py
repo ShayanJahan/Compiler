@@ -13,8 +13,8 @@ class SymbolTable:
     def __init__(self):
         self.symbols = list()
         self.st_pointer = 100
-        self.start_temp = 2000
-        self.start_data = 5000
+        self.start_temp = 3000
+        self.start_data = 20000
         self.byte_length = 4
         self.return_address = 10
 
