@@ -282,15 +282,16 @@ class Subroutines:
             return
 
         if self.function_memory:
+            symbol = Symbol(name=array_name, variable_type=f'{array_name}*', address_type='relative',
+                            address=self.function_memory[-1].mem_size, scope=self.scope_stack[-1],
+                            symbol_type='variable')
+
             ptr_address = self.relative_access(self.function_memory[-1].mem_size)
             self.function_memory[-1].mem_size += 4
             address = self.relative_access(self.function_memory[-1].mem_size)
             self.add_to_program_block(code=f'(ASSIGN, {address[1:]}, {ptr_address}, )')
             self.function_memory[-1].mem_size += 4 * int(array_len)
 
-            symbol = Symbol(name=array_name, variable_type=f'{array_name}*', address_type='relative',
-                            address=self.function_memory[-1].mem_size, scope=self.scope_stack[-1],
-                            symbol_type='variable')
             self.symbol_table.symbols.append(symbol)
         else:
             ptr_address = self.symbol_table.get_temp()
